@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+      /* Language options */
+      "target": "ES2020",
+      "lib": ["ES2020", "DOM", "DOM.Iterable"],
+      "jsx": "react-jsx", // JSXのサポート
+      "useDefineForClassFields": true, // クラスフィールドの初期化子を使用
+      "baseUrl": "src", // ルートディレクトリの設定
+  
+      /* Module resolution options */
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "allowImportingTsExtensions": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "moduleDetection": "auto",
+  
+      /* Strictness options */
+      "strict": true, // 厳格な型チェックをすべて有効化
+      "noUnusedLocals": true, // 未使用のローカル変数のエラー
+      "noUnusedParameters": true, // 未使用のパラメータのエラー
+      "noFallthroughCasesInSwitch": true, // switchのcaseフォールスルーを防止
+  
+      /* Emit options */
+      "skipLibCheck": true, // ライブラリファイルの型チェックをスキップ
+      "noEmit": true // コンパイル結果を出力しない
+    },
+    "include": ["./src/**/*"] // コンパイル対象のファイル
+  }
+  
