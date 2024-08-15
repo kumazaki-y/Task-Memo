@@ -62,17 +62,5 @@
     "typescript": "^5.5.3",
     "vite": "^5.4.0",
     "vite-tsconfig-paths": "^5.0.1"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "prettier --write --loglevel=warn",
-      "eslint --fix --quiet"
-    ],
-    "src/**/*.{css,less,sass,scss}": [
-      "stylelint --fix --quiet"
-    ],
-    "src/**/*.{html,json,gql,graphql}": [
-      "prettier --write --loglevel=error"
-    ]
   }
 }

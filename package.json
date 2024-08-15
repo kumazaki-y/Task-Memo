@@ -1,0 +1,20 @@
+{
+  "name": "reclaimtime",
+  "private": true,
+  "version": "0.0.0",
+  "simple-git-hooks": {
+    "pre-commit": "cd front && yarn run lint-staged"
+  },
+  "lint-staged": {
+    "front/src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write --loglevel=warn",
+      "eslint --fix --quiet"
+    ],
+    "front/src/**/*.{css,less,sass,scss}": [
+      "stylelint --fix --quiet"
+    ],
+    "front/src/**/*.{html,json,gql,graphql}": [
+      "prettier --write --loglevel=error"
+    ]
+  }
+}
