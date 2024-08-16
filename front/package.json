@@ -4,18 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint:es": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:style": "stylelint 'src/**/*.{css,less,sass,scss}'",
-    "lint:style:fix": "stylelint --fix 'src/**/*.{css,less,sass,scss}'",
-    "lint": "yarn lint:style && yarn lint:es",
-    "lint:fix": "yarn lint:style:fix && yarn lint:es:fix",
-    "lint:es:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
-    "format": "prettier --write --loglevel=warn 'src/**/*.{js,jsx,ts,tsx,html,json,gql,graphql}'",
-    "fix": "yarn format && yarn lint:fix",
-    "preinstall": "npx typesync || :",
-    "preview": "vite preview"
+  "dev": "vite",
+  "build": "tsc -b && vite build",
+  "lint:es": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+  "lint:style": "stylelint 'src/**/*.{css,less,sass,scss}'",
+  "lint:style:fix": "stylelint --fix 'src/**/*.{css,less,sass,scss}'",
+  "lint": "yarn lint:style && yarn lint:es",
+  "lint:fix": "yarn lint:style:fix && yarn lint:es:fix",
+  "lint:es:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
+  "format": "prettier --write --log-level=warn 'src/**/*.{js,jsx,ts,tsx,html,json,gql,graphql}'",
+  "fix": "yarn format && yarn lint:fix",
+  "preinstall": "npx typesync || :",
+  "preview": "vite preview"
+
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -62,5 +63,20 @@
     "typescript": "^5.5.3",
     "vite": "^5.4.0",
     "vite-tsconfig-paths": "^5.0.1"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write --log-level=warn",
+      "eslint --fix --quiet"
+    ],
+    "src/**/*.{css,less,sass,scss}": [
+      "stylelint --fix --quiet"
+    ],
+    "src/**/*.{html,json,gql,graphql}": [
+      "prettier --write --log-level=error"
+    ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "cd front && yarn run lint-staged"
   }
 }
