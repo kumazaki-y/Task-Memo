@@ -1,11 +1,11 @@
 import { type FC } from 'react';
 import './App.css';
-import Home from './components/ecosystems/home';
+import AppRoutes from '../src/routes/index';
 
 const App: FC = () => {
   return (
     <>
-      <Home />
+      <AppRoutes />
     </>
   );
 };

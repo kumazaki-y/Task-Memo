@@ -1,5 +1,7 @@
 import { type FC, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
+import Button from '../atoms/Button';
 
 // APIから返ってくるJSONデータの型を定義
 interface MessageResponse {
@@ -18,11 +20,30 @@ const Home: FC = () => {
     suspense: true,
   });
 
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handleRegister = () => {
+    navigate('/register');
+  };
+
+  const handleGuestLogin = () => {
+    navigate('/dashboard');
+  };
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div>
         <h1>Reclaim Time</h1>
         <p>{data?.message}</p>
+        <div className="button-group">
+          <Button label="Login" onClick={handleLogin} />
+          <Button label="Register" onClick={handleRegister} />
+          <Button label="Guest Login" onClick={handleGuestLogin} />
+        </div>
       </div>
     </Suspense>
   );
