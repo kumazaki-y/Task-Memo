@@ -1,7 +1,21 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
-  root to: 'home#index'
+  namespace :api do
+    namespace :v1 do
+      
+        devise_scope :api_v1_user do
+          post 'auth/guest_sign_in', to: 'auth/sessions#guest_sign_in'
+        end
 
+        mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+          registrations: 'api/v1/auth/registrations',
+          sessions: 'api/v1/auth/sessions'
+        }
+
+    end
+  end
+
+  root to: 'home#index'
+  get '*path', to: 'home#index' #ワイルドカードルート
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

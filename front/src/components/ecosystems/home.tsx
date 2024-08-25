@@ -1,7 +1,8 @@
 import { type FC, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
-import Button from '../atoms/Button';
+import useGuestLogin from '../../features/auth/hooks/guestLogin';
+import Button from '../atoms/button';
 
 // APIから返ってくるJSONデータの型を定義
 interface MessageResponse {
@@ -21,6 +22,7 @@ const Home: FC = () => {
   });
 
   const navigate = useNavigate();
+  const { handleGuestLogin } = useGuestLogin();
 
   const handleLogin = () => {
     navigate('/login');
@@ -28,10 +30,6 @@ const Home: FC = () => {
 
   const handleRegister = () => {
     navigate('/register');
-  };
-
-  const handleGuestLogin = () => {
-    navigate('/dashboard');
   };
 
   return (

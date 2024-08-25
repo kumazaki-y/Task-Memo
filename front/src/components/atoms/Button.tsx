@@ -2,7 +2,7 @@ import { type FC } from 'react';
 
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   className?: string; // カスタムクラスを適用するためのプロップ
 }
