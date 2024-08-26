@@ -6,7 +6,7 @@ Rails.application.routes.draw do
           post 'auth/guest_sign_in', to: 'auth/sessions#guest_sign_in'
         end
 
-        mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+        mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks], controllers: {
           registrations: 'api/v1/auth/registrations',
           sessions: 'api/v1/auth/sessions'
         }

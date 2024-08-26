@@ -1,6 +1,20 @@
 class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
 
+  def create
+    @resource = User.find_by(email: params[:email])
   
+    # ユーザーが存在し、パスワードが正しいか検証
+    if @resource && @resource.valid_password?(params[:password])
+
+      @token = @resource.create_token
+      @resource.save!
+      render_create_success
+    else
+      # ユーザーが見つからない、またはパスワードが間違っている場合のエラーレスポンス
+      render_create_error_bad_credentials
+    end
+  end
+
   def guest_sign_in
 
     # 一時的なユーザーを作成

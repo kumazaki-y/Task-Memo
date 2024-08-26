@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Dashboard from '../components/ecosystems/dashboard';
 import Home from '../components/ecosystems/home';
 import Login from '../components/ecosystems/loginForm';
-import Register from '../components/ecosystems/register';
+import Register from '../components/ecosystems/registerForm';
 
 const AppRoutes: FC = () => {
   return (
