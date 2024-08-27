@@ -26,9 +26,6 @@ const useGuestLogin = (): UseGuestLoginReturn => {
         const accessToken = response.headers.get('access-token');
         const client = response.headers.get('client');
         const uid = response.headers.get('uid');
-        console.log('Access Token:', accessToken);
-        console.log('Client:', client);
-        console.log('UID:', uid);
 
         if (accessToken !== null && client !== null && uid !== null) {
           localStorage.setItem('access-token', accessToken);

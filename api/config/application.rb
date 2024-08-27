@@ -43,7 +43,18 @@ module Myapp
 
     #セッションを有効にする
     config.session_store :cookie_store, key: '_interslice_session'
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use config.session_store, config.session_options
+    config.middleware.use ActionDispatch::Cookies # Required for all session management
+    config.middleware.use ActionDispatch::Session::CookieStore, config.session_options
+    config.middleware.use ActionDispatch::Flash
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'localhost:5173'
+        resource '*',
+          :headers => :any,
+          # 'access-token'、'uid'、'client'などのheaders情報を用いてログイン状態を維持する。
+          :expose => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+          :methods => %i[get post options delete put]
+      end
+    end
   end
 end

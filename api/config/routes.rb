@@ -10,7 +10,10 @@ Rails.application.routes.draw do
           registrations: 'api/v1/auth/registrations',
           sessions: 'api/v1/auth/sessions'
         }
-
+        # ログインユーザー取得のルーティング
+        namespace :auth do
+          resources :sessions, only: %i[index]
+        end
     end
   end
 
