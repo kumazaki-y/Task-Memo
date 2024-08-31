@@ -1,13 +1,13 @@
 class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
+  before_action :set_current_user
 
-  # ログイン状態の確認
   def index
-    if current_user
-        render json: {is_login: true, data: current_user }
+    if @current_user
+      render json: { is_login: true, data: @current_user }
     else
-        render json: {is_login: false, message: "ユーザーが存在しません"}
+      render json: { is_login: false, message: "ユーザーが存在しません" }
     end
-end
+  end
 
   # ログイン処理
   def create
@@ -61,4 +61,9 @@ end
     end
   end
 
+  private
+
+  def set_current_user
+    @current_user = User.find_by(uid: request.headers['uid'])
+  end
 end

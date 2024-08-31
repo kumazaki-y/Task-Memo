@@ -4,3 +4,4 @@ export const GUEST_SIGN_IN = `${DEFAULT_API_BASE_URL}/auth/guest_sign_in`;
 export const USER_LOGIN = `${DEFAULT_API_BASE_URL}/auth/sign_in`;
 export const USER_REGISTER = `${DEFAULT_API_BASE_URL}/auth`;
 export const USER_LOGOUT = `${DEFAULT_API_BASE_URL}/auth/sign_out`;
+export const USER_SESSIONS = `${DEFAULT_API_BASE_URL}/auth/sessions`;
