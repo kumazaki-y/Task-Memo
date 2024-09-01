@@ -44,10 +44,9 @@ const useRegister = (): UseRegisterReturn => {
       });
 
       if (response.ok) {
-        alert('確認メールを送信しました。メールを確認してください。');
-        navigate('/login');
+        navigate('/checkemail');
       } else {
-        setError('Registration failed. Please try again.');
+        setError('登録に失敗しました。もう一度お試しください。');
       }
     } catch (error: unknown) {
       setError('Something went wrong. Please try again.');
