@@ -2,12 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { USER_REGISTER } from 'urls';
 
-interface RegisterResponse {
-  'access-token': string;
-  client: string;
-  uid: string;
-}
-
 interface UseRegisterReturn {
   email: string;
   setEmail: (email: string) => void;
@@ -42,15 +36,15 @@ const useRegister = (): UseRegisterReturn => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          confirm_success_url: 'http://localhost:5173/login',
+        }),
       });
 
-      const data = (await response.json()) as RegisterResponse;
-
       if (response.ok) {
-        localStorage.setItem('access-token', data['access-token']);
-        localStorage.setItem('client', data.client);
-        localStorage.setItem('uid', data.uid);
+        alert('確認メールを送信しました。メールを確認してください。');
         navigate('/login');
       } else {
         setError('Registration failed. Please try again.');

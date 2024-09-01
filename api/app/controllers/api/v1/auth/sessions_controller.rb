@@ -1,5 +1,15 @@
 class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
+  before_action :set_current_user
 
+  def index
+    if @current_user
+      render json: { is_login: true, data: @current_user }
+    else
+      render json: { is_login: false, message: "ユーザーが存在しません" }
+    end
+  end
+
+  # ログイン処理
   def create
     @resource = User.find_by(email: params[:email])
   
@@ -51,4 +61,9 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
     end
   end
 
+  private
+
+  def set_current_user
+    @current_user = User.find_by(uid: request.headers['uid'])
+  end
 end

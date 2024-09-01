@@ -4,13 +4,14 @@ Rails.application.routes.draw do
       
         devise_scope :api_v1_user do
           post 'auth/guest_sign_in', to: 'auth/sessions#guest_sign_in'
+          get '/auth/sessions', to: 'auth/sessions#index'
         end
 
         mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks], controllers: {
           registrations: 'api/v1/auth/registrations',
-          sessions: 'api/v1/auth/sessions'
+          sessions: 'api/v1/auth/sessions',
+          confirmations: 'api/v1/auth/confirmations'
         }
-
     end
   end
 
@@ -24,4 +25,5 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
+
 end
