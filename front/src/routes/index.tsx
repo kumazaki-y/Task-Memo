@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes , Navigate } from 'react-router-dom';
 import Dashboard from '../components/ecosystems/dashboard';
 import Home from '../components/ecosystems/home';
 import Login from '../components/ecosystems/loginForm';
@@ -16,6 +16,7 @@ const AppRoutes: FC = () => {
         path="/dashboard"
         element={useProtectedRoute({ children: <Dashboard /> })}
       />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
