@@ -11,8 +11,6 @@ const useProtectedRoute = ({
 }: ProtectedRouteProps): ReactNode | null => {
   const { loading, isSignedIn } = useContext(AuthContext);
 
-  console.log(loading, isSignedIn);
-
   if (!loading) {
     if (isSignedIn) {
       return children;

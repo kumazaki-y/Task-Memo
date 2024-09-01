@@ -29,6 +29,7 @@ const LoginForm: FC = () => {
             setPassword(e.target.value);
           }}
           placeholder="Enter your password"
+          autocomplete="current-password"
           error={error}
         />
         <Button type="submit" label="Login" />

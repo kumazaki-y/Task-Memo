@@ -23,7 +23,14 @@ export const useAuth = (): Authstate => {
     const client = localStorage.getItem('client');
     const uid = localStorage.getItem('uid');
 
-    if (accessToken !== null && client !== null && uid !== null) {
+    if (
+      accessToken === null ||
+      accessToken.trim() === '' ||
+      client === null ||
+      client.trim() === '' ||
+      uid === null ||
+      uid.trim() === ''
+    ) {
       setLoading(false);
 
       return;

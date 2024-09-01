@@ -2,6 +2,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { USER_LOGIN } from 'urls';
 
+interface UserData {
+  data: {
+    confirmed_at: string | null;
+    email: string;
+    id: number;
+    image: string | null;
+    name: string | null;
+    nickname: string | null;
+    password: string | null;
+    provider: string;
+    uid: string;
+  };
+}
+
 interface UseLoginReturn {
   email: string;
   setEmail: (email: string) => void;
@@ -31,6 +45,19 @@ const useLogin = (): UseLoginReturn => {
       });
 
       if (response.ok) {
+        const userData = (await response.json()) as UserData;
+
+        if (
+          userData.data.confirmed_at === null ||
+          userData.data.confirmed_at === ''
+        ) {
+          setError(
+            'Your account is not yet confirmed. Please check your email.',
+          );
+
+          return;
+        }
+
         const accessToken = response.headers.get('access-token');
         const client = response.headers.get('client');
         const uid = response.headers.get('uid');
@@ -42,8 +69,8 @@ const useLogin = (): UseLoginReturn => {
         }
 
         navigate('/dashboard');
-      } else {
-        setError('Invalid email or password.');
+      } else if (response.status === 401) {
+        setError('401エラー');
       }
     } catch (error: unknown) {
       setError('Something went wrong. Please try again.');
