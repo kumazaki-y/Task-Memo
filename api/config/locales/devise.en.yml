@@ -19,6 +19,11 @@ en:
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
+        request_reset_link_msg: "Click the link below to reset your password."
+        password_change_link: "Reset my password"
+        ignore_mail_msg: "If you didn't request this, please ignore this email."
+        no_changes_msg: "Your password won't change until you access the link above and create a new one."
+        link_expiration_warning: "Note: This link has an expiration. If it no longer works, please request a new password reset link."
       reset_password_instructions:
         subject: "Reset password instructions"
       unlock_instructions:

@@ -10,6 +10,11 @@ const useProtectedRoute = ({
   children,
 }: ProtectedRouteProps): ReactNode | null => {
   const { loading, isSignedIn } = useContext(AuthContext);
+  const resetPasswordToken = localStorage.getItem('reset_password_token');
+
+  if (resetPasswordToken !== null) {
+    return <Navigate to="/reset-password" replace />;
+  }
 
   if (!loading) {
     if (isSignedIn) {

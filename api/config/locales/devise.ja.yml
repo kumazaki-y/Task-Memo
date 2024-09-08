@@ -1,0 +1,5 @@
+ja:
+  devise:
+    mailer:
+      reset_password_instructions:
+        link_expiration_warning: "注意: このリンクには有効期限があります。有効期限が切れている場合は、再度パスワードリセットをリクエストしてください。"

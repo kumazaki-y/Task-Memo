@@ -21,6 +21,7 @@ const LoginForm: FC = () => {
           }}
           placeholder="Enter your email"
           error={error}
+          autocomplete="username"
         />
         <InputField
           type="password"
@@ -35,7 +36,7 @@ const LoginForm: FC = () => {
         <Button type="submit" label="Login" />
         <div>
           <Link to="/register">Register</Link> |{' '}
-          <Link to="/password-reset">Forgot Password?</Link>
+          <Link to="/password">Forgot Password?</Link>
         </div>
       </FormContainer>
     </div>
