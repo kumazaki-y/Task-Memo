@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 import useRegister from '../../features/auth/hooks/register';
 import Button from '../atoms/button';
-import InputField from '../atoms/inputField';
+import InputField from '../atoms/inputfield';
 import FormContainer from '../molecules/formcontainer';
 
 const RegisterForm: FC = () => {
@@ -29,6 +29,7 @@ const RegisterForm: FC = () => {
           }}
           placeholder="Enter your email"
           error={error}
+          autocomplete="username"
         />
         <InputField
           type="password"
@@ -38,6 +39,7 @@ const RegisterForm: FC = () => {
           }}
           placeholder="Enter your password"
           error={error}
+          autocomplete="new-password"
         />
         <InputField
           type="password"
@@ -47,6 +49,7 @@ const RegisterForm: FC = () => {
           }}
           placeholder="Confirm your password"
           error={error}
+          autocomplete="confirm-password"
         />
         <Button type="submit" label="Register" />
         <div>

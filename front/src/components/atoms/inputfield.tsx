@@ -6,6 +6,7 @@ interface InputFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   error?: string;
+  autocomplete?: string;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -14,6 +15,7 @@ const InputField: FC<InputFieldProps> = ({
   onChange,
   placeholder,
   error,
+  autocomplete,
 }) => {
   return (
     <div className="input-field">
@@ -23,6 +25,7 @@ const InputField: FC<InputFieldProps> = ({
         onChange={onChange}
         placeholder={placeholder}
         className={error != null && error !== '' ? 'error' : undefined}
+        autoComplete={autocomplete}
       />
       {error != null && error !== '' ? (
         <span className="error-message">{error}</span>

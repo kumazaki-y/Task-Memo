@@ -4,7 +4,7 @@ interface ButtonProps {
   label: string;
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
-  className?: string; // カスタムクラスを適用するためのプロップ
+  className?: string;
 }
 
 const Button: FC<ButtonProps> = ({
