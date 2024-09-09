@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import useLogout from '../../features/auth/hooks/logout';
+import useLogout from '../../features/auth/hooks/useLogout';
 import Button from '../atoms/button';
 
 const Dashboard: FC = () => {

@@ -1,7 +1,7 @@
 import { type FC, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
-import useGuestLogin from '../../features/auth/hooks/guestLogin';
+import useGuestLogin from '../../features/auth/hooks/useGuestLogin';
 import Button from '../atoms/button';
 
 // APIから返ってくるJSONデータの型を定義

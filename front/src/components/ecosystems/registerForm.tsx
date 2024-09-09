@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
-import useRegister from '../../features/auth/hooks/register';
+import useRegister from '../../features/auth/hooks/useRegister';
 import Button from '../atoms/button';
 import InputField from '../atoms/inputfield';
 import FormContainer from '../molecules/formcontainer';
