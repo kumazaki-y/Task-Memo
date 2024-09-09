@@ -21,7 +21,7 @@ const LoginForm: FC = () => {
           }}
           placeholder="Enter your email"
           error={error}
-          autocomplete="username"
+          autocomplete="email"
         />
         <InputField
           type="password"
