@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { Input, FormControl, FormErrorMessage } from '@chakra-ui/react';
 
 interface InputFieldProps {
   type: string;
@@ -13,24 +14,24 @@ const InputField: FC<InputFieldProps> = ({
   type,
   value,
   onChange,
-  placeholder,
-  error,
+  placeholder = '', // デフォルト値を設定
+  error = '', // デフォルト値を設定
   autocomplete,
 }) => {
   return (
-    <div className="input-field">
-      <input
+    <FormControl isInvalid={error.trim() !== ''}>
+      {' '}
+      {/* 明示的な空文字チェック */}
+      <Input
         type={type}
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
-        className={error != null && error !== '' ? 'error' : undefined}
+        placeholder={placeholder !== '' ? placeholder : undefined}
         autoComplete={autocomplete}
+        size="md"
       />
-      {error != null && error !== '' ? (
-        <span className="error-message">{error}</span>
-      ) : null}
-    </div>
+      {error.trim() !== '' && <FormErrorMessage>{error}</FormErrorMessage>}
+    </FormControl>
   );
 };
 
