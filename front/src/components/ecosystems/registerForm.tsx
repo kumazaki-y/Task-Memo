@@ -2,8 +2,8 @@ import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 import useRegister from '../../features/auth/hooks/useRegister';
 import Button from '../atoms/button';
-import InputField from '../atoms/inputfield';
-import FormContainer from '../molecules/formcontainer';
+import InputField from '../atoms/inputField';
+import FormContainer from '../molecules/formContainer';
 
 const RegisterForm: FC = () => {
   const {

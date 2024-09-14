@@ -1,5 +1,5 @@
 import { PASSWORD_RESET_REQUEST_URL } from 'urls';
-import { useSendEmail } from './useSendEmail';
+import { useSendEmail } from '../../hooks/useSendEmail';
 
 interface UseSendPasswordResetReturn {
   handlePasswordResetRequest: (email: string) => Promise<void>;

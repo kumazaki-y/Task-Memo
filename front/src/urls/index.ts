@@ -6,3 +6,4 @@ export const USER_REGISTER = `${DEFAULT_API_BASE_URL}/auth`;
 export const USER_LOGOUT = `${DEFAULT_API_BASE_URL}/auth/sign_out`;
 export const USER_SESSIONS = `${DEFAULT_API_BASE_URL}/auth/sessions`;
 export const PASSWORD_RESET_REQUEST_URL = `${DEFAULT_API_BASE_URL}/auth/password`;
+export const BOARDS_API = `${DEFAULT_API_BASE_URL}/boards`;
