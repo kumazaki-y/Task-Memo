@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import useResetPassword from '../../features/auth/hooks/useResetPassword';
 import Button from '../atoms/button';
-import InputField from '../atoms/inputfield';
+import InputField from '../atoms/inputField';
 
 const ResetPasswordForm: FC = () => {
   const {

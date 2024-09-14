@@ -18,4 +18,6 @@ class User < ApplicationRecord
     self.allow_password_change = false
   end
 
+  has_many :boards, dependent: :destroy
+
 end

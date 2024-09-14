@@ -1,8 +1,8 @@
 import { type FC, useState } from 'react';
 import useSendPasswordReset from '../../features/auth/hooks/useSendPasswordReset';
 import Button from '../atoms/button';
-import InputField from '../atoms/inputfield';
-import FormContainer from '../molecules/formcontainer';
+import InputField from '../atoms/inputField';
+import FormContainer from '../molecules/formContainer';
 
 const SendPasswordResetForm: FC = () => {
   const { handlePasswordResetRequest, error, isLoading } =
