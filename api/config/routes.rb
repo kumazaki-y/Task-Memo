@@ -13,7 +13,9 @@ Rails.application.routes.draw do
           confirmations: 'api/v1/auth/confirmations',
           passwords: 'api/v1/auth/passwords'
         }
-        resources :boards, only: %i[index create update destroy]
+        resources :boards, only: %i[index create update destroy] do
+          resources :tasks, only: %i[index create show update destroy]
+        end
     end
   end
 
