@@ -35,7 +35,7 @@ const Home: FC = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div>
-        <h1>Reclaim Time</h1>
+        <h1>Task-Memo</h1>
         <p>{data?.message}</p>
         <div className="button-group">
           <Button label="Login" onClick={handleLogin} />
