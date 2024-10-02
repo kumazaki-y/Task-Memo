@@ -1,4 +1,6 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:3000/api/v1';
+const DEFAULT_API_BASE_URL =
+  process.env.PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+//   vercelの環境変数を参照し、指定がない場合はデフォルトのURLを使用
 
 export const GUEST_SIGN_IN = `${DEFAULT_API_BASE_URL}/auth/guest_sign_in`;
 export const USER_LOGIN = `${DEFAULT_API_BASE_URL}/auth/sign_in`;
