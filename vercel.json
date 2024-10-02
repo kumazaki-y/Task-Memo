@@ -1,5 +1,14 @@
 {
-  "projects": {
-    "root": "front"
-  }
+  "builds": [
+    {
+      "src": "front/package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "front/$1"
+    }
+  ]
 }
