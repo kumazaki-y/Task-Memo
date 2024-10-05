@@ -2,6 +2,7 @@ import { type FC, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import useGuestLogin from '../../features/auth/hooks/useGuestLogin';
+import { DEFAULT_API_BASE_URL } from '../../urls/index';
 import Button from '../atoms/button';
 
 // APIから返ってくるJSONデータの型を定義
@@ -17,7 +18,7 @@ const fetcher = async (url: string): Promise<MessageResponse> => {
 };
 const Home: FC = () => {
   // useSWRの戻り値に型を指定
-  const { data } = useSWR<MessageResponse>('http://localhost:3000', fetcher, {
+  const { data } = useSWR<MessageResponse>(DEFAULT_API_BASE_URL, fetcher, {
     suspense: true,
   });
 
