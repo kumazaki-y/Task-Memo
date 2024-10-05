@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { PASSWORD_RESET_REQUEST_URL } from 'urls';
+import { FRONTEND_URL } from '../../../urls/index';
 import { useSendEmail } from '../../hooks/useSendEmail';
 
 interface UseSendPasswordResetReturn {
@@ -17,7 +18,7 @@ const useSendPasswordReset = (): UseSendPasswordResetReturn => {
     try {
       const body = {
         email,
-        redirect_url: 'http://localhost:5173/reset-password',
+        redirect_url: `${FRONTEND_URL}/reset-password`,
       };
       await sendEmail(PASSWORD_RESET_REQUEST_URL, body, '/checkemail');
     } catch (err) {

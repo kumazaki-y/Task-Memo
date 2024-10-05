@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { USER_REGISTER } from 'urls';
+import { USER_REGISTER, FRONTEND_URL } from 'urls';
 
 interface UseRegisterReturn {
   email: string;
@@ -39,7 +39,7 @@ const useRegister = (): UseRegisterReturn => {
         body: JSON.stringify({
           email,
           password,
-          confirm_success_url: 'http://localhost:5173/login',
+          confirm_success_url: `${FRONTEND_URL}/login`,
         }),
       });
 

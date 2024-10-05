@@ -7,8 +7,11 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://localhost:5173"
-
+    if Rails.env.production?
+      origins "https://api.task-memo.com", "https://www.task-memo.com"  # 本番用
+    else
+      origins "http://localhost:5173"  # 開発用
+    end
     resource "*",
       headers: :any,
       methods: %i[get post put patch delete options head],
