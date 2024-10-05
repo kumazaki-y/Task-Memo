@@ -7,7 +7,25 @@ import Button from '../atoms/button';
 import ConfirmModal from './confirmModal';
 import Task from './task'; // Taskコンポーネントをインポート
 
-const Board: FC = () => {
+interface BoardItem {
+  id: number;
+  name: string;
+}
+
+interface BoardProps {
+  boards: BoardItem[];
+  boardName: string;
+  setBoardName: (name: string) => void;
+  updateBoard: () => Promise<void>;
+  deleteBoard: (id: number) => Promise<void>;
+  toggleEditing: (id: number, name: string) => void;
+  selectedBoardId: number | null;
+  setSelectedBoardId: (id: number | null) => void;
+  isEditing: boolean;
+  closeAddForm: () => void;
+}
+
+const Board: FC<BoardProps> = () => {
   const {
     boards,
     deleteBoard,
