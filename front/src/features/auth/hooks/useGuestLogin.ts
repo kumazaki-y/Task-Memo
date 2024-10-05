@@ -4,11 +4,11 @@ import { GUEST_SIGN_IN } from '../../../urls/index';
 
 interface UseGuestLoginReturn {
   handleGuestLogin: () => Promise<void>;
-  error: string | null;
+  error: string | undefined;
 }
 
 const useGuestLogin = (): UseGuestLoginReturn => {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   const handleGuestLogin = async (): Promise<void> => {

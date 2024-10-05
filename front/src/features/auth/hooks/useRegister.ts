@@ -9,15 +9,15 @@ interface UseRegisterReturn {
   setPassword: (password: string) => void;
   confirmPassword: string;
   setConfirmPassword: (password: string) => void;
-  handleRegister: () => Promise<void>;
-  error: string | null;
+  handleRegister: (event: React.FormEvent) => Promise<void>;
+  error: string | undefined;
 }
 
 const useRegister = (): UseRegisterReturn => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   const handleRegister = async (event: React.FormEvent) => {

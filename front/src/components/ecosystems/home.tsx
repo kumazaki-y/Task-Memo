@@ -24,11 +24,11 @@ const Home: FC = () => {
   const navigate = useNavigate();
   const { handleGuestLogin } = useGuestLogin();
 
-  const handleLogin = () => {
+  const navigateLogin = () => {
     navigate('/login');
   };
 
-  const handleRegister = () => {
+  const navigateRegister = () => {
     navigate('/register');
   };
 
@@ -38,8 +38,8 @@ const Home: FC = () => {
         <h1>Task-Memo</h1>
         <p>{data?.message}</p>
         <div className="button-group">
-          <Button label="Login" onClick={handleLogin} />
-          <Button label="Register" onClick={handleRegister} />
+          <Button label="Login" onClick={navigateLogin} />
+          <Button label="Register" onClick={navigateRegister} />
           <Button label="Guest Login" onClick={handleGuestLogin} />
         </div>
       </div>
