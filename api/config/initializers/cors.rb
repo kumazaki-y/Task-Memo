@@ -8,7 +8,9 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     if Rails.env.production?
-      origins "https://api.task-memo.com", "https://www.task-memo.com"  # 本番用
+      origins "https://api.task-memo.com", 
+              "https://www.task-memo.com", 
+              'https://reclaim-time-j3eg83j1t-kumazakis-projects.vercel.app'  # 本番用
     else
       origins "http://localhost:5173"  # 開発用
     end
