@@ -1,3 +1,5 @@
+// vite.config.ts で ts-node を使うための設定ファイル
+
 {
   "compilerOptions": {
     /* Language and Environment */

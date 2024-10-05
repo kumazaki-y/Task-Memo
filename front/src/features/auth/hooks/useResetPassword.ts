@@ -17,13 +17,15 @@ const useResetPassword = (): {
   setPassword: (password: string) => void;
   passwordConfirmation: string;
   setPasswordConfirmation: (passwordConfirmation: string) => void;
-  errorMessage: string | null;
+  errorMessage: string | undefined;
   handleResetPassword: () => Promise<void>;
 } => {
   const [searchParams] = useSearchParams();
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
   const navigate = useNavigate();
 
   useEffect(() => {

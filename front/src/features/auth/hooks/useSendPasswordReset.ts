@@ -3,7 +3,7 @@ import { useSendEmail } from '../../hooks/useSendEmail';
 
 interface UseSendPasswordResetReturn {
   handlePasswordResetRequest: (email: string) => Promise<void>;
-  error: string | null;
+  error: string | undefined;
   isLoading: boolean;
 }
 

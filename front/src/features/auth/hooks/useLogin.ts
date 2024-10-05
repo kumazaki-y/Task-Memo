@@ -4,13 +4,13 @@ import { USER_LOGIN } from 'urls';
 
 interface UserData {
   data: {
-    confirmed_at: string | null;
+    confirmed_at: string | undefined;
     email: string;
     id: number;
-    image: string | null;
-    name: string | null;
-    nickname: string | null;
-    password: string | null;
+    image: string | undefined;
+    name: string | undefined;
+    nickname: string | undefined;
+    password: string | undefined;
     provider: string;
     uid: string;
   };
@@ -21,14 +21,14 @@ interface UseLoginReturn {
   setEmail: (email: string) => void;
   password: string;
   setPassword: (password: string) => void;
-  handleLogin: () => Promise<void>;
-  error: string | null;
+  handleLogin: (event: React.FormEvent) => Promise<void>;
+  error: string | undefined;
 }
 
 const useLogin = (): UseLoginReturn => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
