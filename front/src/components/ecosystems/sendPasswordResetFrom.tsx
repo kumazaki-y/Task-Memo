@@ -9,7 +9,7 @@ const SendPasswordResetForm: FC = () => {
     useSendPasswordReset();
 
   const [email, setEmail] = useState('');
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | undefined>(undefined);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -20,7 +20,7 @@ const SendPasswordResetForm: FC = () => {
       return;
     }
 
-    setFormError(null);
+    setFormError(undefined);
     await handlePasswordResetRequest(email);
   };
 

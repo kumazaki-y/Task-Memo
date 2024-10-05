@@ -50,7 +50,7 @@ const useResetPassword = (): {
 
   // パスワードリセット処理
   const handleResetPassword = async () => {
-    setErrorMessage(null);
+    setErrorMessage(undefined);
 
     try {
       const resetPasswordToken =
