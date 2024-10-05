@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PASSWORD_RESET_REQUEST_URL } from 'urls';
 import { useSendEmail } from '../../hooks/useSendEmail';
 
@@ -8,15 +9,20 @@ interface UseSendPasswordResetReturn {
 }
 
 const useSendPasswordReset = (): UseSendPasswordResetReturn => {
-  const { sendEmail, error, isLoading } = useSendEmail();
+  const { sendEmail, isLoading } = useSendEmail();
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const handlePasswordResetRequest = async (email: string) => {
-    const body = {
-      email,
-      redirect_url: 'http://localhost:5173/reset-password',
-    };
-
-    await sendEmail(PASSWORD_RESET_REQUEST_URL, body, '/checkemail');
+    setError(undefined);
+    try {
+      const body = {
+        email,
+        redirect_url: 'http://localhost:5173/reset-password',
+      };
+      await sendEmail(PASSWORD_RESET_REQUEST_URL, body, '/checkemail');
+    } catch (err) {
+      setError('Failed to send password reset request');
+    }
   };
 
   return {
