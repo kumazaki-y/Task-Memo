@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { BOARDS_API } from '../../urls';
 import { apiRequest } from '../../utils/apiRequest';
 
-interface Board {
+interface BoardItem {
   id: number;
   name: string;
 }
 
 interface UseBoardsReturn {
-  boards: Board[];
+  boards: BoardItem[];
   boardName: string;
   setBoardName: (name: string) => void;
   isEditing: boolean;
@@ -21,7 +21,7 @@ interface UseBoardsReturn {
 }
 
 const useBoards = (): UseBoardsReturn => {
-  const [boards, setBoards] = useState<Board[]>([]);
+  const [boards, setBoards] = useState<BoardItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [boardName, setBoardName] = useState('');
   const [selectedBoardId, setSelectedBoardId] = useState<number | null>(null);
@@ -29,7 +29,7 @@ const useBoards = (): UseBoardsReturn => {
   // ボードを取得する関数
   const fetchBoards = async (): Promise<void> => {
     try {
-      const data = await apiRequest<Board[]>(BOARDS_API, 'GET');
+      const data = await apiRequest<BoardItem[]>(BOARDS_API, 'GET');
       setBoards(data);
     } catch (error) {
       console.error('Error fetching boards:', error);
@@ -39,7 +39,7 @@ const useBoards = (): UseBoardsReturn => {
   // ボードを作成する関数
   const addBoard = async (): Promise<void> => {
     try {
-      const newBoard = await apiRequest<Board>(BOARDS_API, 'POST', {
+      const newBoard = await apiRequest<BoardItem>(BOARDS_API, 'POST', {
         board: { name: boardName },
       });
       setBoards([...boards, newBoard]);
@@ -54,7 +54,7 @@ const useBoards = (): UseBoardsReturn => {
     if (selectedBoardId === null) return; // 明示的なnullチェック
 
     try {
-      const updatedBoard = await apiRequest<Board>(
+      const updatedBoard = await apiRequest<BoardItem>(
         `${BOARDS_API}/${selectedBoardId}`,
         'PATCH',
         {
