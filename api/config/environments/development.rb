@@ -33,26 +33,24 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
+# メール送信設定
+config.action_mailer.delivery_method = :smtp
 
-  config.action_mailer.perform_caching = false
+config.action_mailer.smtp_settings = {
+  address: 'email-smtp.ap-northeast-1.amazonaws.com', # SES東京リージョンのSMTPエンドポイント
+  port: 587, # SESの推奨ポート（TLS/STARTTLS）
+  domain: 'www.task-memo.com',
+  user_name: ENV['AWS_ACCESS_KEY_ID'], # AWSのアクセスキーID
+  password: ENV['AWS_SMTP_PASSWORD'],   # 生成したSMTPパスワードを環境変数で指定
+  authentication: 'login',              # 認証方式。Amazon SESでは基本的に「login」を使用
+  enable_starttls_auto: true           # STARTTLSで暗号化を有効に
+}
 
-  config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
+config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
+config.action_mailer.default_url_options = { host: 'www.task-memo.com' }
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-
-  config.action_mailer.delivery_method = :smtp
-
-  config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
-    port: 587,
-    domain: 'gmail.com',
-    user_name: ENV['EMAIL_ADDRESS'],
-    password: ENV['EMAIL_PASSWORD'],
-    authentication: 'plain',
-    enable_starttls_auto: true
-  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

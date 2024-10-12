@@ -17,7 +17,7 @@ Rails.application.configure do
 
   # Ensures that a master key has been made available in ENV["RAILS_MASTER_KEY"], config/master.key, or an environment
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
-  # config.require_master_key = true
+  config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
@@ -87,4 +87,23 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+# メール送信設定
+config.action_mailer.delivery_method = :smtp
+
+config.action_mailer.smtp_settings = {
+  address: 'email-smtp.ap-northeast-1.amazonaws.com', # SES東京リージョンのSMTPエンドポイント
+  port: 587, # SESの推奨ポート（TLS/STARTTLS）
+  domain: 'www.task-memo.com',
+  user_name: ENV['AWS_ACCESS_KEY_ID'], # AWSのアクセスキーID
+  password: ENV['AWS_SMTP_PASSWORD'],   # 生成したSMTPパスワードを環境変数で指定
+  authentication: 'login',              # 認証方式。Amazon SESでは基本的に「login」を使用
+  enable_starttls_auto: true           # STARTTLSで暗号化を有効に
+}
+
+config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
+config.action_mailer.default_url_options = { host: 'www.task-memo.com' }
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.perform_caching = false
+
 end
