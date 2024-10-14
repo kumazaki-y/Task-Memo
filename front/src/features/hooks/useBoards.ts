@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { BOARDS_API } from '../../urls';
 import { apiRequest } from '../../utils/apiRequest';
 
@@ -27,14 +27,14 @@ const useBoards = (): UseBoardsReturn => {
   const [selectedBoardId, setSelectedBoardId] = useState<number | null>(null);
 
   // ボードを取得する関数
-  const fetchBoards = async (): Promise<void> => {
+  const fetchBoards = useCallback(async (): Promise<void> => {
     try {
       const data = await apiRequest<BoardItem[]>(BOARDS_API, 'GET');
       setBoards(data);
     } catch (error) {
       console.error('Error fetching boards:', error);
     }
-  };
+  }, []);
 
   // ボードを作成する関数
   const addBoard = async (): Promise<void> => {
@@ -42,7 +42,7 @@ const useBoards = (): UseBoardsReturn => {
       const newBoard = await apiRequest<BoardItem>(BOARDS_API, 'POST', {
         board: { name: boardName },
       });
-      setBoards([...boards, newBoard]);
+      setBoards((prevBoards) => [...prevBoards, newBoard]);
       setBoardName(''); // フォームをリセット
     } catch (error) {
       console.error('Error creating board:', error);
@@ -51,7 +51,7 @@ const useBoards = (): UseBoardsReturn => {
 
   // ボードを編集する関数
   const updateBoard = async (): Promise<void> => {
-    if (selectedBoardId === null) return; // 明示的なnullチェック
+    if (selectedBoardId === null) return;
 
     try {
       const updatedBoard = await apiRequest<BoardItem>(
@@ -74,12 +74,12 @@ const useBoards = (): UseBoardsReturn => {
       console.error('Error updating board:', error);
     }
   };
-
   // ボードを削除する関数
+
   const deleteBoard = async (id: number): Promise<void> => {
     try {
       await apiRequest(`${BOARDS_API}/${id}`, 'DELETE');
-      setBoards(boards.filter((board) => board.id !== id));
+      setBoards((prevBoards) => prevBoards.filter((board) => board.id !== id));
     } catch (error) {
       console.error('Error deleting board:', error);
     }
@@ -93,8 +93,8 @@ const useBoards = (): UseBoardsReturn => {
   };
 
   useEffect(() => {
-    void fetchBoards(); // fetchBoards() の実行をマークしてPromise処理の指摘に対応
-  }, []);
+    void fetchBoards();
+  }, [fetchBoards]);
 
   return {
     boards,

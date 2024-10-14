@@ -1,15 +1,23 @@
-// src/components/ecosystems/EmailSent.tsx
 import { type FC } from 'react';
+import { Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import Card from '../templates/card';
+import Layout from '../templates/layout';
 
-const CheckEmail: FC = () => {
+const EmailSent: FC = () => {
+  const textColor = useColorModeValue('gray.800', 'white');
+
   return (
-    <div>
-      <h1>メールを送信しました</h1>
-      <p>
-        ご登録いただいたメールアドレスに確認メールを送信しました。メールをご確認ください。
-      </p>
-    </div>
+    <Layout>
+      <Card>
+        <Heading as="h1" size="xl" textAlign="center" color={textColor}>
+          メールを送信しました
+        </Heading>
+        <Text fontSize="md" textAlign="center" color={textColor}>
+          ご登録いただいたメールアドレスに確認メールを送信しました。メールをご確認ください。
+        </Text>
+      </Card>
+    </Layout>
   );
 };
 
-export default CheckEmail;
+export default EmailSent;

@@ -1,11 +1,25 @@
-import { type FC, useState } from 'react';
-import { Box, Text, Stack, HStack, Input } from '@chakra-ui/react';
-import useBoards from '../../features/hooks/useBoards'; // ボード管理フック
+import {
+  type FC,
+  useState,
+  useRef,
+  useEffect,
+  type KeyboardEvent,
+} from 'react';
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Text,
+  VStack,
+  Input,
+  Flex,
+  IconButton,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import useBoards from '../../features/hooks/useBoards';
 import useConfirmDelete from '../../features/hooks/useConfirmDelete';
-import useTasks from '../../features/hooks/useTasks'; // useTasksフックをインポート
-import Button from '../atoms/button';
+import useTasks from '../../features/hooks/useTasks';
 import ConfirmModal from './confirmModal';
-import Task from './task'; // Taskコンポーネントをインポート
+import Task from './task';
 
 interface BoardItem {
   id: number;
@@ -43,9 +57,11 @@ const Board: FC<BoardProps> = () => {
     {},
   );
   const [taskNames, setTaskNames] = useState<Record<number, string>>({});
-
-  // 削除対象のボードIDを追跡する状態を追加
   const [targetBoardId, setTargetBoardId] = useState<number | null>(null);
+
+  const boardInputRef = useRef<HTMLInputElement>(null);
+  const taskInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const {
     isModalVisible,
@@ -54,133 +70,151 @@ const Board: FC<BoardProps> = () => {
     handleCancelDelete,
   } = useConfirmDelete();
 
-  // フォームの表示/非表示を切り替える関数
+  useEffect(() => {
+    if (isEditing && boardInputRef.current !== null) {
+      boardInputRef.current.focus();
+    }
+  }, [isEditing]);
+
+  // 外部クリックを検出してタスクフォームを閉じる
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        selectedBoardId !== null &&
+        formVisibility[selectedBoardId] &&
+        formRef.current !== null &&
+        !formRef.current.contains(event.target as Node)
+      ) {
+        closeTaskForm(selectedBoardId);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [formVisibility, selectedBoardId]);
+
   const toggleTaskFormVisibility = (boardId: number) => {
     setFormVisibility((prevState) => ({
       ...prevState,
       [boardId]: !prevState[boardId],
     }));
+    setTimeout(() => {
+      taskInputRef.current?.focus();
+    }, 0);
   };
 
   const handleTaskNameChange = (boardId: number, name: string) => {
     setTaskNames((prev) => ({
       ...prev,
-      [boardId]: name, // 各ボードのタスク名を保存
+      [boardId]: name,
     }));
   };
 
   const closeTaskForm = (boardId: number) => {
     setFormVisibility((prev) => ({
       ...prev,
-      [boardId]: false, // フォームを非表示にする
+      [boardId]: false,
     }));
     setTaskNames((prev) => ({
       ...prev,
-      [boardId]: '', // 該当するタスク名をリセット
+      [boardId]: '',
     }));
   };
 
-  return (
-    <Box
-      p={4}
-      bg="gray.50"
-      borderRadius="md"
-      boxShadow="md"
-      maxWidth="80%"
-      mx="auto"
-      mt={8}
-    >
-      {boards.length > 0 ? (
-        <Stack spacing={6}>
-          {boards.map((board) => {
-            // 各ボードに関連するタスクをフィルタリング
-            const tasksForBoard = tasks.filter(
-              (task) => task.boardId === board.id,
-            );
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLInputElement>,
+    action: () => void,
+  ) => {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      action();
+    }
+  };
 
-            return (
-              <Box
-                key={board.id}
-                p={4}
-                border="1px solid"
-                borderColor="gray.200"
-                borderRadius="md"
-                w="100%"
-              >
-                <HStack justifyContent="space-between" w="100%">
+  const bgColor = useColorModeValue('purple.50', 'gray.700');
+  const borderColor = useColorModeValue('purple.100', 'gray.600');
+  const textColor = useColorModeValue('gray.800', 'white');
+  const accentColor = useColorModeValue('purple.500', 'purple.300');
+  const hoverFocusBgColor = useColorModeValue('purple.100', 'gray.600');
+
+  return (
+    <VStack spacing={6} align="stretch" w="100%">
+      {boards.length > 0 ? (
+        boards.map((board) => {
+          const tasksForBoard = tasks.filter(
+            (task) => task.boardId === board.id,
+          );
+
+          return (
+            <Box
+              key={board.id}
+              p={6}
+              bg={bgColor}
+              borderRadius="xl"
+              boxShadow="sm"
+              borderWidth={1}
+              borderColor={borderColor}
+              transition="all 0.3s"
+              _hover={{ boxShadow: 'md' }}
+            >
+              <VStack spacing={4} align="stretch">
+                <Flex justifyContent="space-between" alignItems="center">
                   {isEditing && selectedBoardId === board.id ? (
                     <Input
+                      ref={boardInputRef}
                       value={boardName}
                       onChange={(e) => {
                         setBoardName(e.target.value);
                       }}
+                      onKeyDown={(e) => {
+                        handleKeyDown(e, updateBoard);
+                      }}
+                      onBlur={async () => {
+                        await updateBoard();
+                      }}
                       placeholder="ボード名を編集"
+                      size="lg"
+                      fontWeight="bold"
+                      borderColor={accentColor}
+                      _hover={{ borderColor: accentColor }}
+                      _focus={{
+                        borderColor: accentColor,
+                        boxShadow: `0 0 0 1px ${accentColor}`,
+                      }}
                     />
                   ) : (
                     <Text
-                      fontSize="lg"
+                      fontSize="xl"
                       fontWeight="bold"
+                      color={textColor}
+                      cursor="pointer"
                       onClick={() => {
                         toggleEditing(board.id, board.name);
                       }}
-                      _hover={{ cursor: 'pointer', color: 'blue.500' }}
+                      _hover={{ color: accentColor }}
                     >
                       {board.name}
                     </Text>
                   )}
-
-                  {/* ボード更新または削除ボタン */}
-                  {isEditing && selectedBoardId === board.id ? (
-                    <HStack>
-                      <Button
-                        label="保存"
-                        colorScheme="blue"
-                        size="sm"
-                        onClick={async () => {
-                          await updateBoard();
-                        }}
-                      />
-                      <Button
-                        label="キャンセル"
-                        colorScheme="gray"
-                        size="sm"
-                        onClick={() => {
-                          toggleEditing(board.id, board.name);
-                        }}
-                      />
-                    </HStack>
-                  ) : (
-                    <Button
-                      label="ボードを削除"
-                      colorScheme="red"
-                      size="sm"
+                  {!isEditing && (
+                    <IconButton
+                      aria-label="削除"
+                      icon={<DeleteIcon />}
                       onClick={() => {
-                        setTargetBoardId(board.id); // 削除対象のボードIDを設定
-                        confirmDelete(board.id, board.name); // 削除確認モーダルを表示
+                        setTargetBoardId(board.id);
+                        confirmDelete(board.id, board.name);
                       }}
+                      size="sm"
+                      variant="ghost"
+                      colorScheme="gray"
+                      _hover={{ bg: 'red.100', color: 'red.500' }}
                     />
                   )}
-                </HStack>
+                </Flex>
 
-                {/* 削除確認モーダル */}
-                {isModalVisible && targetBoardId === board.id && (
-                  <ConfirmModal
-                    isVisible={isModalVisible}
-                    onConfirm={() => {
-                      handleConfirmDelete(async () => {
-                        await deleteBoard(board.id);
-                      });
-                    }}
-                    onCancel={() => {
-                      handleCancelDelete();
-                      setTargetBoardId(null); // モーダルを閉じたらターゲットIDをリセット
-                    }}
-                    message={`本当に ${board.name} を削除しますか？`}
-                  />
-                )}
-
-                {/* タスクリストの表示 */}
-                <Stack spacing={4}>
+                <VStack spacing={3} align="stretch">
                   {tasksForBoard.map((task) => (
                     <Task
                       key={task.id}
@@ -192,46 +226,73 @@ const Board: FC<BoardProps> = () => {
                       updateTaskStatus={updateTaskStatus}
                     />
                   ))}
-                </Stack>
+                </VStack>
 
-                {/* タスク追加フォームの表示切替ボタン */}
-                <Button
-                  label={
-                    formVisibility[board.id] ? 'キャンセル' : 'タスクを追加'
-                  }
-                  onClick={() => {
-                    toggleTaskFormVisibility(board.id);
-                  }}
-                />
-
-                {/* タスク追加フォーム */}
-                {formVisibility[board.id] && (
-                  <Stack spacing={4}>
-                    <input
-                      type="text"
-                      placeholder="タスク名を入力"
+                {formVisibility[board.id] ? (
+                  <Box ref={formRef}>
+                    <Input
+                      ref={taskInputRef}
+                      placeholder="新しいタスク名"
                       value={taskNames[board.id] ?? ''}
                       onChange={(e) => {
                         handleTaskNameChange(board.id, e.target.value);
                       }}
-                    />
-                    <Button
-                      label="タスクを追加"
-                      onClick={async () => {
-                        await addTask(board.id, taskNames[board.id] ?? '');
-                        closeTaskForm(board.id); // タスク追加後にフォームをリセット
+                      onKeyDown={(e) => {
+                        handleKeyDown(e, async () => {
+                          await addTask(board.id, taskNames[board.id] ?? '');
+                          closeTaskForm(board.id);
+                        });
+                      }}
+                      onBlur={() => {
+                        closeTaskForm(board.id);
+                      }}
+                      borderColor={accentColor}
+                      _hover={{ borderColor: accentColor }}
+                      _focus={{
+                        borderColor: accentColor,
+                        boxShadow: `0 0 0 1px ${accentColor}`,
+                        bg: hoverFocusBgColor,
                       }}
                     />
-                  </Stack>
+                  </Box>
+                ) : (
+                  <IconButton
+                    aria-label="タスクを追加"
+                    icon={<AddIcon />}
+                    onClick={() => {
+                      toggleTaskFormVisibility(board.id);
+                    }}
+                    colorScheme="purple"
+                    variant="outline"
+                    w="100%"
+                    _hover={{ bg: 'purple.100' }}
+                  />
                 )}
-              </Box>
-            );
-          })}
-        </Stack>
+              </VStack>
+            </Box>
+          );
+        })
       ) : (
-        <Text>No boards available.</Text>
+        <Text color="gray.500">
+          ボードがありません。新しいボードを追加してください。
+        </Text>
       )}
-    </Box>
+      {isModalVisible && targetBoardId !== null && (
+        <ConfirmModal
+          isVisible={isModalVisible}
+          onConfirm={() => {
+            handleConfirmDelete(async () => {
+              await deleteBoard(targetBoardId);
+            });
+          }}
+          onCancel={() => {
+            handleCancelDelete();
+            setTargetBoardId(null);
+          }}
+          message={`本当に ${boards.find((b) => b.id === targetBoardId)?.name} を削除しますか？`}
+        />
+      )}
+    </VStack>
   );
 };
 

@@ -20,7 +20,7 @@ class Api::V1::Auth::PasswordsController < DeviseTokenAuth::PasswordsController
     end
   
     def reset_password_failed
-      render json: { message: "Something went wrong." }
+      render json: { message: I18n.t('errors.password_reset_failed') }
     end
 
     

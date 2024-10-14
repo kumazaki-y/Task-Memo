@@ -16,6 +16,10 @@ interface UserData {
   };
 }
 
+interface ErrorData {
+  message?: string;
+}
+
 interface UseLoginReturn {
   email: string;
   setEmail: (email: string) => void;
@@ -52,7 +56,7 @@ const useLogin = (): UseLoginReturn => {
           userData.data.confirmed_at === ''
         ) {
           setError(
-            'Your account is not yet confirmed. Please check your email.',
+            'あなたのアカウントはまだ認証されていません。メールをご確認ください。',
           );
 
           return;
@@ -69,11 +73,16 @@ const useLogin = (): UseLoginReturn => {
         }
 
         navigate('/dashboard');
-      } else if (response.status === 401) {
-        setError('401エラー');
+      } else {
+        const errorData = (await response.json()) as ErrorData;
+        setError(errorData.message ?? 'エラーが発生しました。');
       }
     } catch (error: unknown) {
-      setError('Something went wrong. Please try again.');
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     }
   };
 
