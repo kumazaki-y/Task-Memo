@@ -5,7 +5,7 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
     if @current_user
       render json: { is_login: true, data: @current_user }
     else
-      render json: { is_login: false, message: "ユーザーが存在しません" }
+      render json: { is_login: false, message: I18n.t('errors.user_not_found') }
     end
   end
 
@@ -21,7 +21,7 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
       render_create_success
     else
       # ユーザーが見つからない、またはパスワードが間違っている場合のエラーレスポンス
-      render_create_error_bad_credentials
+      render json: { message: I18n.t('errors.invalid_credentials') }, status: :unauthorized
     end
   end
 
@@ -55,9 +55,9 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
     user.tokens.delete(client_id) if user
 
     if user&.save
-      render json: { message: 'ログアウトしました。' }
+      render json: { message: I18n.t('devise.sessions.signed_out') }
     else
-      render json: { errors: ['ログアウトに失敗しました。'] }, status: :unprocessable_entity
+      render json: { errors: [I18n.t('errors.logout_failed')] }, status: :unprocessable_entity
     end
   end
 

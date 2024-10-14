@@ -1,5 +1,3 @@
-# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
-
 en:
   devise:
     confirmations:
@@ -68,3 +66,14 @@ en:
       not_saved:
         one: "1 error prohibited this %{resource} from being saved:"
         other: "%{count} errors prohibited this %{resource} from being saved:"
+    password_reset_failed: "Password reset failed."
+    user_not_found: "User not found."
+    invalid_credentials: "Invalid email or password."
+    logout_failed: "Logout failed."
+    email_confirmation_failed: "Failed to confirm email."
+    board_creation_failed: "Failed to create the board."
+    board_update_failed: "Failed to update the board."
+    board_deletion_failed: "Failed to delete the board."
+    task_creation_failed: "Failed to create the task."
+    task_update_failed: "Failed to update the task."
+    task_deletion_failed: "Failed to delete the task."

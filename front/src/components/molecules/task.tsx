@@ -1,7 +1,22 @@
-import { type FC, useState } from 'react';
-import { Box, HStack, Stack, Text, Input, Checkbox } from '@chakra-ui/react';
+import {
+  type FC,
+  useState,
+  useRef,
+  useEffect,
+  type KeyboardEvent,
+} from 'react';
+import { DeleteIcon, InfoIcon } from '@chakra-ui/icons';
+import {
+  HStack,
+  VStack,
+  Text,
+  Input,
+  Checkbox,
+  IconButton,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import useConfirmDelete from '../../features/hooks/useConfirmDelete';
-import Button from '../atoms/button';
+import CardContainer from '../templates/cardContainer';
 import ConfirmModal from './confirmModal';
 import TaskDetail from './taskDetail';
 
@@ -39,6 +54,7 @@ const Task: FC<TaskProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newTaskName, setNewTaskName] = useState(task.name);
   const [showDetail, setShowDetail] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const {
     isModalVisible,
@@ -47,95 +63,105 @@ const Task: FC<TaskProps> = ({
     handleCancelDelete,
   } = useConfirmDelete();
 
-  // タスクの部分更新（タスク名や完了状態のみ）
+  useEffect(() => {
+    if (isEditing && inputRef.current !== null) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
   const handleTaskUpdate = () => {
     updateTask(
       task.id,
       task.boardId,
       newTaskName,
-      task.description ?? '', // 詳細画面で更新されないので、既存のdescriptionを使う
+      task.description ?? '', // Nullable check
       task.is_completed,
-      task.due_date ?? '',
+      task.due_date ?? '', // Nullable check
     );
     setIsEditing(false);
   };
 
-  // 完了状態の更新
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateTaskStatus(task.id, task.boardId, e.target.checked);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      handleTaskUpdate();
+    }
+  };
+
+  const textColor = useColorModeValue('gray.800', 'white');
+  const accentColor = useColorModeValue('purple.500', 'purple.300');
+
   return (
-    <Box
-      p={4}
-      border="1px solid"
-      borderColor="gray.200"
-      borderRadius="md"
-      mb={4}
-    >
-      <HStack justifyContent="space-between" w="100%">
-        {isEditing ? (
-          <Input
-            value={newTaskName}
-            onChange={(e) => {
-              setNewTaskName(e.target.value);
-            }}
-            placeholder="タスク名を入力"
-          />
-        ) : (
-          <Text
-            fontSize="lg"
-            fontWeight="bold"
-            onClick={() => {
-              setIsEditing(true);
-            }}
-            _hover={{ cursor: 'pointer', color: 'blue.500' }}
-          >
-            {task.name}
-          </Text>
-        )}
-        {isEditing ? (
-          <HStack>
-            <Button
-              label="保存"
-              colorScheme="blue"
+    <CardContainer isCompleted={task.is_completed}>
+      <VStack align="stretch" spacing={3}>
+        <HStack justifyContent="space-between">
+          {isEditing ? (
+            <Input
+              ref={inputRef}
+              value={newTaskName}
+              onChange={(e) => {
+                setNewTaskName(e.target.value);
+              }}
+              onKeyDown={handleKeyDown}
+              onBlur={() => {
+                handleTaskUpdate();
+              }}
+              placeholder="タスク名を入力"
               size="sm"
-              onClick={handleTaskUpdate}
-            />
-            <Button
-              label="キャンセル"
-              colorScheme="gray"
-              size="sm"
-              onClick={() => {
-                setIsEditing(false);
+              borderColor={accentColor}
+              _focus={{
+                borderColor: accentColor,
+                boxShadow: `0 0 0 1px ${accentColor}`,
               }}
             />
-          </HStack>
-        ) : (
-          <HStack>
-            <Button
-              label="詳細"
+          ) : (
+            <Text
+              fontSize="md"
+              fontWeight="semibold"
+              color={textColor}
+              isTruncated
+              cursor="pointer"
+              onClick={() => {
+                setIsEditing(true);
+              }}
+              _hover={{ color: accentColor }}
+            >
+              {task.name}
+            </Text>
+          )}
+          <HStack spacing={2}>
+            <IconButton
+              aria-label="詳細"
+              icon={<InfoIcon />}
               size="sm"
+              variant="ghost"
+              colorScheme="blue"
               onClick={() => {
                 setShowDetail(true);
               }}
             />
-            <Button
-              label="削除"
-              colorScheme="red"
+            <IconButton
+              aria-label="削除"
+              icon={<DeleteIcon />}
               size="sm"
+              variant="ghost"
+              colorScheme="black"
+              _hover={{ bg: 'red.100', color: 'red.500' }}
               onClick={() => {
                 confirmDelete(task.id, task.name);
               }}
             />
           </HStack>
-        )}
-      </HStack>
+        </HStack>
 
-      <Stack spacing={2} mt={2}>
-        <Text>{task.description}</Text>
-
-        <Checkbox isChecked={task.is_completed} onChange={handleStatusChange}>
+        <Checkbox
+          isChecked={task.is_completed}
+          onChange={handleStatusChange}
+          colorScheme="purple"
+        >
           {task.is_completed ? '完了' : '未完了'}
         </Checkbox>
 
@@ -145,23 +171,24 @@ const Task: FC<TaskProps> = ({
             onConfirm={() => {
               handleConfirmDelete(deleteTask);
             }}
-            onCancel={handleCancelDelete}
+            onCancel={() => {
+              handleCancelDelete();
+            }}
             message={`本当に${task.name}を削除しますか？`}
           />
         )}
 
-        {/* 詳細画面 */}
         {showDetail && (
           <TaskDetail
             task={task}
             onClose={() => {
               setShowDetail(false);
             }}
-            updateTaskDetail={updateTask} // 直接updateTaskを渡す
+            updateTaskDetail={updateTask}
           />
         )}
-      </Stack>
-    </Box>
+      </VStack>
+    </CardContainer>
   );
 };
 

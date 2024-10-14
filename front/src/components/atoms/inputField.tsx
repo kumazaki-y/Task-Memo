@@ -8,6 +8,7 @@ interface InputFieldProps {
   placeholder?: string;
   error?: string;
   autocomplete?: string;
+  bg?: string;
 }
 
 const InputField: FC<InputFieldProps> = ({

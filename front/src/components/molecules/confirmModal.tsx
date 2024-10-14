@@ -1,11 +1,22 @@
 import { type FC } from 'react';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 interface ConfirmModalProps {
   isVisible: boolean;
   onConfirm: () => void;
   onCancel: () => void;
   message: string;
-  targetName?: string;
 }
 
 const ConfirmModal: FC<ConfirmModalProps> = ({
@@ -13,23 +24,30 @@ const ConfirmModal: FC<ConfirmModalProps> = ({
   onConfirm,
   onCancel,
   message,
-  targetName,
 }) => {
-  if (!isVisible) return null;
-
-  const hasTargetName =
-    targetName !== undefined && targetName !== null && targetName.trim() !== '';
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const textColor = useColorModeValue('gray.800', 'white');
+  const borderColor = useColorModeValue('purple.100', 'gray.600');
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <p>
-          {message} {hasTargetName && <strong>{targetName}</strong>}?
-        </p>
-        <button onClick={onConfirm}>はい</button>
-        <button onClick={onCancel}>いいえ</button>
-      </div>
-    </div>
+    <Modal isOpen={isVisible} onClose={onCancel}>
+      <ModalOverlay />
+      <ModalContent bg={bgColor} borderColor={borderColor} borderWidth={1}>
+        <ModalHeader color={textColor}>確認</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Text color={textColor}>{message}</Text>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="gray" mr={3} onClick={onCancel}>
+            キャンセル
+          </Button>
+          <Button colorScheme="red" onClick={onConfirm}>
+            削除
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 

@@ -13,6 +13,11 @@ interface UseRegisterReturn {
   error: string | undefined;
 }
 
+// エラーデータの型を定義
+interface ErrorData {
+  message?: string;
+}
+
 const useRegister = (): UseRegisterReturn => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,10 +51,17 @@ const useRegister = (): UseRegisterReturn => {
       if (response.ok) {
         navigate('/checkemail');
       } else {
-        setError('登録に失敗しました。もう一度お試しください。');
+        const errorData = (await response.json()) as ErrorData;
+        setError(
+          errorData.message ?? '登録に失敗しました。もう一度お試しください。',
+        );
       }
     } catch (error: unknown) {
-      setError('Something went wrong. Please try again.');
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     }
   };
 

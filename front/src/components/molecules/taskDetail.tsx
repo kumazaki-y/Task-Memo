@@ -11,8 +11,11 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  VStack,
+  HStack,
+  Button,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import Button from '../atoms/button';
 
 interface TaskDetailProps {
   task: {
@@ -23,7 +26,7 @@ interface TaskDetailProps {
     due_date?: string;
     boardId: number;
   };
-  onClose: () => void; // 閉じるための関数
+  onClose: () => void;
   updateTaskDetail: (
     id: number,
     boardId: number,
@@ -31,7 +34,7 @@ interface TaskDetailProps {
     description: string,
     isCompleted: boolean,
     dueDate: string,
-  ) => void; // タスク詳細の更新
+  ) => void;
 }
 
 const TaskDetail: FC<TaskDetailProps> = ({
@@ -56,76 +59,106 @@ const TaskDetail: FC<TaskDetailProps> = ({
     onClose();
   };
 
-  return (
-    <Modal isOpen={true} onClose={onClose}>
-      <ModalOverlay bg="rgba(0, 0, 0, 0.8)" />
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const textColor = useColorModeValue('gray.800', 'white');
+  const mutedColor = useColorModeValue('gray.500', 'gray.400');
+  const accentColor = useColorModeValue('purple.500', 'purple.300');
 
-      <ModalContent maxWidth="600px" mx="auto" my="10%" borderRadius="lg" p={6}>
-        <ModalHeader>タスク詳細</ModalHeader>
+  return (
+    <Modal isOpen={true} onClose={onClose} size="xl">
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalContent bg={bgColor} mx="auto" my="10%" borderRadius="lg">
+        <ModalHeader color={textColor}>タスク詳細</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box p={4}>
-            <Text fontSize="lg" fontWeight="bold">
-              タスク編集
-            </Text>
+          <VStack spacing={4} align="stretch">
+            <Box>
+              <Text fontWeight="bold" mb={2} color={textColor}>
+                タスク名
+              </Text>
+              <Input
+                value={newName}
+                onChange={(e) => {
+                  setNewName(e.target.value);
+                }}
+                placeholder="タスク名を入力"
+                borderColor={accentColor}
+                _hover={{ borderColor: accentColor }}
+                _focus={{
+                  borderColor: accentColor,
+                  boxShadow: `0 0 0 1px ${accentColor}`,
+                }}
+              />
+            </Box>
 
-            <Text>名前</Text>
-            <Textarea
-              value={newName}
-              onChange={(e) => {
-                setNewName(e.target.value);
-              }}
-              placeholder="タスク名を入力"
-              mb={4}
-            />
+            <Box>
+              <Text fontWeight="bold" mb={2} color={textColor}>
+                説明
+              </Text>
+              <Textarea
+                value={newDescription}
+                onChange={(e) => {
+                  setNewDescription(e.target.value);
+                }}
+                placeholder="タスクの説明を入力"
+                rows={10}
+                borderColor={accentColor}
+                _hover={{ borderColor: accentColor }}
+                _focus={{
+                  borderColor: accentColor,
+                  boxShadow: `0 0 0 1px ${accentColor}`,
+                }}
+              />
+            </Box>
 
-            <Text>説明</Text>
-            <Textarea
-              value={newDescription}
-              onChange={(e) => {
-                setNewDescription(e.target.value);
-              }}
-              placeholder="タスクの説明を入力"
-              mb={4}
-              rows={10}
-              overflow="auto"
-            />
+            <Box>
+              <Text fontWeight="bold" mb={2} color={textColor}>
+                完了状態
+              </Text>
+              <Checkbox
+                isChecked={isCompleted}
+                onChange={(e) => {
+                  setIsCompleted(e.target.checked);
+                }}
+                colorScheme="purple"
+              >
+                <Text color={mutedColor}>
+                  {isCompleted ? '完了' : '未完了'}
+                </Text>
+              </Checkbox>
+            </Box>
 
-            <Text>完了状態</Text>
-            <Checkbox
-              isChecked={isCompleted}
-              onChange={(e) => {
-                setIsCompleted(e.target.checked);
-              }}
-              mb={4}
-            >
-              {isCompleted ? '完了' : '未完了'}
-            </Checkbox>
+            <Box>
+              <Text fontWeight="bold" mb={2} color={textColor}>
+                期限
+              </Text>
+              <Input
+                type="date"
+                value={newDueDate}
+                onChange={(e) => {
+                  setNewDueDate(e.target.value);
+                }}
+                borderColor={accentColor}
+                _hover={{ borderColor: accentColor }}
+                _focus={{
+                  borderColor: accentColor,
+                  boxShadow: `0 0 0 1px ${accentColor}`,
+                }}
+                onClick={(e) => {
+                  (e.target as HTMLInputElement).showPicker();
+                }}
+              />
+            </Box>
 
-            <Text>期限</Text>
-            <Input
-              type="date"
-              value={newDueDate}
-              onChange={(e) => {
-                setNewDueDate(e.target.value);
-              }}
-              mb={4}
-            />
-
-            <Button
-              label="保存"
-              onClick={handleSave}
-              colorScheme="blue"
-              size="md"
-            />
-            <Button
-              label="キャンセル"
-              onClick={onClose}
-              colorScheme="gray"
-              size="md"
-              className="ml-2"
-            />
-          </Box>
+            <HStack spacing={4} justifyContent="flex-end">
+              <Button onClick={onClose} variant="outline" colorScheme="gray">
+                キャンセル
+              </Button>
+              <Button onClick={handleSave} colorScheme="purple">
+                保存
+              </Button>
+            </HStack>
+          </VStack>
         </ModalBody>
       </ModalContent>
     </Modal>

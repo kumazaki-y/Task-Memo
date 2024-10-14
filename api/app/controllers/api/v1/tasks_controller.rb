@@ -30,16 +30,16 @@ class Api::V1::TasksController < ApplicationController
       if @task.update(task_params)
         render json: @task, status: :ok
       else
-        render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: task.errors.full_messages.map { |msg| I18n.t("errors.task_update_failed", default: msg) } }, status: :unprocessable_entity
       end
     end
   
     # タスクを削除
     def destroy
       if @task.destroy
-        render json: { message: 'Task deleted successfully' }, status: :ok
+        render json: { message: I18n.t("errors.task_deletion_successful") }, status: :ok
       else
-        render json: { errors: 'Failed to delete the task' }, status: :unprocessable_entity
+        render json: { errors: I18n.t("errors.task_deletion_failed") }, status: :unprocessable_entity
       end
     end
   

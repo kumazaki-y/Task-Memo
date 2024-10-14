@@ -13,7 +13,7 @@ class Api::V1::BoardsController < ApplicationController
       if board.save
         render json: board, status: :created
       else
-        render json: { errors: board.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: I18n.t('errors.board_creation_failed') }, status: :unprocessable_entity
       end
     end
 
@@ -26,11 +26,11 @@ class Api::V1::BoardsController < ApplicationController
     end
 
     def destroy
-        if @board.destroy
-          render json: { message: 'Board deleted successfully' }, status: :ok
-        else
-          render json: { errors: 'Failed to delete the board' }, status: :unprocessable_entity
-        end
+      if @board.destroy
+        render json: { message: I18n.t('errors.board_deletion_failed') }, status: :ok
+      else
+        render json: { errors: I18n.t('errors.board_deletion_failed') }, status: :unprocessable_entity
+      end
     end
 
     private
