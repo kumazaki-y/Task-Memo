@@ -22,7 +22,7 @@ export const registerSchema = yup.object().shape({
     .required('パスワードは必須です'),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'パスワードが一致しません')
+    .oneOf([yup.ref('password')], 'パスワードが一致しません')
     .required('パスワード確認は必須です'),
 });
 
@@ -33,7 +33,7 @@ export const resetPasswordSchema = yup.object().shape({
     .required('パスワードは必須です'),
   passwordConfirmation: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'パスワードが一致しません')
+    .oneOf([yup.ref('password')], 'パスワードが一致しません')
     .required('パスワード確認は必須です'),
 });
 
