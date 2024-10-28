@@ -13,10 +13,10 @@ import {
   Input,
   Checkbox,
   IconButton,
+  Box,
   useColorModeValue,
 } from '@chakra-ui/react';
 import useConfirmDelete from '../../features/hooks/useConfirmDelete';
-import CardContainer from '../templates/cardContainer';
 import ConfirmModal from './confirmModal';
 import TaskDetail from './taskDetail';
 
@@ -53,6 +53,7 @@ const Task: FC<TaskProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTaskName, setNewTaskName] = useState(task.name);
+  const [newDueDate, setNewDueDate] = useState(task.due_date ?? '');
   const [showDetail, setShowDetail] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -69,14 +70,29 @@ const Task: FC<TaskProps> = ({
     }
   }, [isEditing]);
 
+  // タスクの期限を更新
+  const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value;
+    setNewDueDate(newDate);
+    // 日付が変更されたら即座に更新を行う
+    updateTask(
+      task.id,
+      task.boardId,
+      newTaskName,
+      task.description ?? '',
+      task.is_completed,
+      newDate, // 期限も即時更新
+    );
+  };
+
   const handleTaskUpdate = () => {
     updateTask(
       task.id,
       task.boardId,
       newTaskName,
-      task.description ?? '', // Nullable check
+      task.description ?? '',
       task.is_completed,
-      task.due_date ?? '', // Nullable check
+      newDueDate, // 期限も更新
     );
     setIsEditing(false);
   };
@@ -91,11 +107,30 @@ const Task: FC<TaskProps> = ({
     }
   };
 
+  const bgColor = useColorModeValue(
+    task.is_completed ? 'gray.200' : 'white',
+    task.is_completed ? 'gray.600' : 'gray.700',
+  );
+  const borderColor = useColorModeValue(
+    task.is_completed ? 'gray.300' : 'teal.100',
+    task.is_completed ? 'gray.500' : 'gray.600',
+  );
   const textColor = useColorModeValue('gray.800', 'white');
-  const accentColor = useColorModeValue('purple.500', 'purple.300');
+  const accentColor = useColorModeValue('teal.500', 'teal.300');
+  const mutedColor = useColorModeValue('gray.500', 'gray.400');
+  const hoverBgColor = useColorModeValue('teal.100', 'gray.600');
 
   return (
-    <CardContainer isCompleted={task.is_completed}>
+    <Box
+      p={4}
+      bg={bgColor}
+      borderWidth={1}
+      borderColor={borderColor}
+      borderRadius="md"
+      boxShadow="sm"
+      transition="all 0.3s"
+      _hover={{ boxShadow: 'md' }}
+    >
       <VStack align="stretch" spacing={3}>
         <HStack justifyContent="space-between">
           {isEditing ? (
@@ -106,15 +141,14 @@ const Task: FC<TaskProps> = ({
                 setNewTaskName(e.target.value);
               }}
               onKeyDown={handleKeyDown}
-              onBlur={() => {
-                handleTaskUpdate();
-              }}
+              onBlur={handleTaskUpdate}
               placeholder="タスク名を入力"
               size="sm"
               borderColor={accentColor}
               _focus={{
                 borderColor: accentColor,
                 boxShadow: `0 0 0 1px ${accentColor}`,
+                bg: hoverBgColor,
               }}
             />
           ) : (
@@ -157,13 +191,46 @@ const Task: FC<TaskProps> = ({
           </HStack>
         </HStack>
 
-        <Checkbox
-          isChecked={task.is_completed}
-          onChange={handleStatusChange}
-          colorScheme="purple"
-        >
-          {task.is_completed ? '完了' : '未完了'}
-        </Checkbox>
+        {/* 完了状態と期限を横並びにする */}
+        <HStack spacing={6} align="center">
+          <Box>
+            <Text fontWeight="bold" mb={2} color={textColor}>
+              完了状態
+            </Text>
+            <Checkbox
+              isChecked={task.is_completed}
+              onChange={handleStatusChange}
+              colorScheme="teal"
+              height="40px"
+            >
+              <Text color={mutedColor} width="50px">
+                {task.is_completed ? '完了' : '未完了'}
+              </Text>
+            </Checkbox>
+          </Box>
+
+          <Box>
+            <Text fontWeight="bold" mb={2} color={textColor}>
+              期限
+            </Text>
+            <Input
+              type="date"
+              value={newDueDate}
+              onChange={handleDueDateChange} // 期限を即時更新
+              borderColor={accentColor}
+              _hover={{ borderColor: accentColor }}
+              _focus={{
+                borderColor: accentColor,
+                boxShadow: `0 0 0 1px ${accentColor}`,
+              }}
+              width="150px"
+              height="40px"
+              onClick={(e) => {
+                (e.target as HTMLInputElement).showPicker();
+              }} // カレンダー表示
+            />
+          </Box>
+        </HStack>
 
         {isModalVisible && (
           <ConfirmModal
@@ -171,9 +238,7 @@ const Task: FC<TaskProps> = ({
             onConfirm={() => {
               handleConfirmDelete(deleteTask);
             }}
-            onCancel={() => {
-              handleCancelDelete();
-            }}
+            onCancel={handleCancelDelete}
             message={`本当に${task.name}を削除しますか？`}
           />
         )}
@@ -188,7 +253,7 @@ const Task: FC<TaskProps> = ({
           />
         )}
       </VStack>
-    </CardContainer>
+    </Box>
   );
 };
 

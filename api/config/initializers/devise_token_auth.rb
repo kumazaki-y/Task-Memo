@@ -63,4 +63,11 @@ DeviseTokenAuth.setup do |config|
   # devise confirmable module. If you want to use devise confirmable module and
   # send email, set it to true. (This is a setting for compatibility)
   # config.send_confirmation_email = true
+
+    # 環境ごとに `default_confirm_success_url` を設定
+    if Rails.env.production?
+      config.default_confirm_success_url = 'https://www.task-memo.com/login'
+    elsif Rails.env.development?
+      config.default_confirm_success_url = 'http://localhost:5173/login'
+    end
 end

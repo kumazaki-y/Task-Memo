@@ -8,6 +8,7 @@ interface ButtonProps {
   colorScheme?: string;
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  width?: string;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -16,6 +17,8 @@ const Button: FC<ButtonProps> = ({
   type = 'button',
   colorScheme,
   size = 'md',
+  isLoading,
+  width,
 }) => {
   const fallbackColorScheme = useColorModeValue('purple', 'pink');
   const effectiveColorScheme = colorScheme ?? fallbackColorScheme;
@@ -26,7 +29,8 @@ const Button: FC<ButtonProps> = ({
       onClick={onClick}
       colorScheme={effectiveColorScheme}
       size={size}
-      width="100%" // デフォルトでボタン全体を横幅100%に設定
+      width={width ?? '100%'}
+      isLoading={isLoading}
     >
       {label}
     </ChakraButton>

@@ -3,10 +3,25 @@ export const apiRequest = async <T = Record<string, unknown>>(
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   body?: object,
 ): Promise<T> => {
+  // Cookieからトークンを取得するヘルパー関数
+  const getCookie = (name: string): string | null => {
+    const match = document.cookie.match(
+      '(^|;)\\s*' + name + '\\s*=\\s*([^;]+)',
+    );
+
+    if (match?.[2] != null) {
+      const decodedValue = decodeURIComponent(match[2]);
+
+      return decodedValue !== '' ? decodedValue : null;
+    }
+
+    return null;
+  };
+
   try {
-    const accessToken = localStorage.getItem('access-token') ?? '';
-    const client = localStorage.getItem('client') ?? '';
-    const uid = localStorage.getItem('uid') ?? '';
+    const accessToken = getCookie('access-token') ?? '';
+    const client = getCookie('client') ?? '';
+    const uid = getCookie('uid') ?? '';
 
     if (accessToken === '' || client === '' || uid === '') {
       throw new Error('Missing authentication headers');

@@ -1,16 +1,22 @@
-import { type FC, useState } from 'react';
+import { type FC } from 'react';
 import {
   Heading,
   Text,
   FormControl,
   FormLabel,
   Input,
+  FormErrorMessage,
   VStack,
   Link,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import useSendPasswordReset from '../../features/auth/hooks/useSendPasswordReset';
+import useSendPasswordReset from '../../features/auth/hooks/useSendPasswordReset'; // パスワードリセットフック
+import {
+  useValidation,
+  type FormValues,
+} from '../../features/hooks/useValidation'; // バリデーションフック
+import { sendResetPasswordSchema } from '../../features/hooks/validationSchemas'; // yupスキーマ
 import Button from '../atoms/button';
 import Card from '../templates/card';
 import Layout from '../templates/layout';
@@ -22,22 +28,19 @@ const SendPasswordResetForm: FC = () => {
     isLoading,
   } = useSendPasswordReset();
 
-  const [email, setEmail] = useState('');
-  const [formError, setFormError] = useState<string | undefined>(undefined);
-  const inputBg = useColorModeValue('gray.100', 'gray.700');
+  // バリデーションのセットアップ
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useValidation<FormValues>(sendResetPasswordSchema);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (email.trim() === '') {
-      setFormError('メールアドレスを入力してください');
-
-      return;
-    }
-
-    setFormError(undefined);
-    await handlePasswordResetRequest(email);
+  // フォーム送信時のハンドラ
+  const onSubmit = async (data: { email: string }) => {
+    await handlePasswordResetRequest(data.email); // バリデーション済みデータを渡す
   };
+
+  const inputBg = useColorModeValue('gray.100', 'gray.700');
 
   return (
     <Layout>
@@ -45,34 +48,29 @@ const SendPasswordResetForm: FC = () => {
         <VStack
           spacing={6}
           as="form"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await handleSubmit(e);
-          }}
+          onSubmit={handleSubmit(onSubmit)} // handleSubmitを使用してバリデーションと送信
         >
           <Heading as="h1" size="xl" textAlign="center">
             パスワードリセット
           </Heading>
 
           {/* メールアドレス入力フィールド */}
-          <FormControl isInvalid={Boolean(formError ?? apiError)}>
+          <FormControl isInvalid={Boolean(errors.email)}>
             <FormLabel htmlFor="email">メールアドレス</FormLabel>
             <Input
               id="email"
               type="email"
-              value={email ?? ''}
-              onChange={(e) => {
-                setEmail(e.target.value ?? '');
-              }}
               placeholder="メールアドレスを入力"
               bg={inputBg}
+              {...register('email')} // バリデーションを適用
             />
+            <FormErrorMessage>{errors.email?.message ?? ''}</FormErrorMessage>
           </FormControl>
 
-          {/* エラーメッセージ表示 */}
-          {Boolean(formError ?? apiError) && (
+          {/* エラーメッセージ表示（サーバー側エラー） */}
+          {apiError != null && apiError !== '' && (
             <Text color="red.500" fontSize="sm">
-              {formError ?? apiError}
+              {apiError}
             </Text>
           )}
 

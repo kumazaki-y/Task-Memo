@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GUEST_SIGN_IN } from '../../../urls/index';
 
@@ -7,8 +7,28 @@ interface UseGuestLoginReturn {
   error: string | undefined;
 }
 
+// Cookieの操作用ヘルパー関数
+const setCookie = (name: string, value: string, days: number) => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; secure`;
+};
+
+const getCookie = (name: string): string | null => {
+  const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+
+  if (match?.[2] != null) {
+    const decodedValue = decodeURIComponent(match[2]);
+
+    return decodedValue !== '' ? decodedValue : null;
+  }
+
+  return null;
+};
+
 const useGuestLogin = (): UseGuestLoginReturn => {
   const [error, setError] = useState<string | undefined>(undefined);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // ログイン状態を追跡
+  const [shouldReload, setShouldReload] = useState(false); // リロード用フラグ
   const navigate = useNavigate();
 
   const handleGuestLogin = async (): Promise<void> => {
@@ -27,13 +47,14 @@ const useGuestLogin = (): UseGuestLoginReturn => {
         const client = response.headers.get('client');
         const uid = response.headers.get('uid');
 
-        if (accessToken !== null && client !== null && uid !== null) {
-          localStorage.setItem('access-token', accessToken);
-          localStorage.setItem('client', client);
-          localStorage.setItem('uid', uid);
+        if (accessToken != null && client != null && uid != null) {
+          setCookie('access-token', accessToken, 7);
+          setCookie('client', client, 7);
+          setCookie('uid', uid, 7);
+          setShouldReload(true); // リロードフラグを立てる
+        } else {
+          setError('Failed to retrieve authentication tokens.');
         }
-
-        navigate('/dashboard');
       } else {
         setError('Guest login failed.');
       }
@@ -41,6 +62,26 @@ const useGuestLogin = (): UseGuestLoginReturn => {
       setError('Something went wrong with guest login. Please try again.');
     }
   };
+
+  useEffect(() => {
+    // リロード処理
+    if (shouldReload) {
+      setShouldReload(false);
+      window.location.reload();
+    }
+  }, [shouldReload]);
+
+  useEffect(() => {
+    // ログイン状態の確認後にナビゲート
+    const accessToken = getCookie('access-token');
+    const client = getCookie('client');
+    const uid = getCookie('uid');
+
+    if (accessToken != null && client != null && uid != null) {
+      setIsLoggedIn(true);
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   return { handleGuestLogin, error };
 };

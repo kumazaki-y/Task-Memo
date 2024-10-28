@@ -13,16 +13,30 @@ interface Authstate {
   currentUser: User | null;
 }
 
+// Cookieの操作用ヘルパー関数
+const getCookie = (name: string): string | null => {
+  const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+
+  if (match?.[2] != null) {
+    const decodedValue = decodeURIComponent(match[2]);
+
+    return decodedValue !== '' ? decodedValue : null;
+  }
+
+  return null;
+};
+
 export const useAuth = (): Authstate => {
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const getCurrentUser = async () => {
-    const accessToken = localStorage.getItem('access-token');
-    const client = localStorage.getItem('client');
-    const uid = localStorage.getItem('uid');
+    const accessToken = getCookie('access-token');
+    const client = getCookie('client');
+    const uid = getCookie('uid');
 
+    // Cookieにトークンがなければ認証されていないと判断
     if (
       accessToken === null ||
       accessToken.trim() === '' ||

@@ -13,9 +13,9 @@ import {
   ModalCloseButton,
   VStack,
   HStack,
-  Button,
   useColorModeValue,
 } from '@chakra-ui/react';
+import Button from '../atoms/button'; // 汎用的なボタンをインポート
 
 interface TaskDetailProps {
   task: {
@@ -62,12 +62,18 @@ const TaskDetail: FC<TaskDetailProps> = ({
   const bgColor = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue('gray.800', 'white');
   const mutedColor = useColorModeValue('gray.500', 'gray.400');
-  const accentColor = useColorModeValue('purple.500', 'purple.300');
+  const accentColor = useColorModeValue('teal.500', 'teal.300');
 
   return (
-    <Modal isOpen={true} onClose={onClose} size="xl">
+    <Modal isOpen={true} onClose={onClose} size="8xl">
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-      <ModalContent bg={bgColor} mx="auto" my="10%" borderRadius="lg">
+      <ModalContent
+        bg={bgColor}
+        mx="auto"
+        my="10%"
+        borderRadius="lg"
+        width="90%"
+      >
         <ModalHeader color={textColor}>タスク詳細</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -111,52 +117,67 @@ const TaskDetail: FC<TaskDetailProps> = ({
               />
             </Box>
 
-            <Box>
-              <Text fontWeight="bold" mb={2} color={textColor}>
-                完了状態
-              </Text>
-              <Checkbox
-                isChecked={isCompleted}
-                onChange={(e) => {
-                  setIsCompleted(e.target.checked);
-                }}
-                colorScheme="purple"
-              >
-                <Text color={mutedColor}>
-                  {isCompleted ? '完了' : '未完了'}
+            <HStack spacing={6} align="center">
+              <Box>
+                <Text fontWeight="bold" mb={2} color={textColor}>
+                  完了状態
                 </Text>
-              </Checkbox>
-            </Box>
+                <Checkbox
+                  isChecked={isCompleted}
+                  onChange={(e) => {
+                    setIsCompleted(e.target.checked);
+                  }}
+                  colorScheme="teal"
+                  height="40px"
+                >
+                  <Text color={mutedColor} width="100px">
+                    {isCompleted ? '完了' : '未完了'}
+                  </Text>
+                </Checkbox>
+              </Box>
 
-            <Box>
-              <Text fontWeight="bold" mb={2} color={textColor}>
-                期限
-              </Text>
-              <Input
-                type="date"
-                value={newDueDate}
-                onChange={(e) => {
-                  setNewDueDate(e.target.value);
-                }}
-                borderColor={accentColor}
-                _hover={{ borderColor: accentColor }}
-                _focus={{
-                  borderColor: accentColor,
-                  boxShadow: `0 0 0 1px ${accentColor}`,
-                }}
-                onClick={(e) => {
-                  (e.target as HTMLInputElement).showPicker();
-                }}
+              <Box>
+                <Text fontWeight="bold" mb={2} color={textColor}>
+                  期限
+                </Text>
+                <Input
+                  type="date"
+                  value={newDueDate}
+                  onChange={(e) => {
+                    setNewDueDate(e.target.value);
+                  }}
+                  borderColor={accentColor}
+                  _hover={{ borderColor: accentColor }}
+                  _focus={{
+                    borderColor: accentColor,
+                    boxShadow: `0 0 0 1px ${accentColor}`,
+                  }}
+                  width="140px"
+                  height="40px"
+                  onClick={(e) => {
+                    (e.target as HTMLInputElement).showPicker();
+                  }}
+                />
+              </Box>
+            </HStack>
+
+            <HStack spacing={4} justifyContent="center">
+              <Button
+                label="キャンセル"
+                onClick={onClose}
+                colorScheme="gray"
+                type="button"
+                size="md"
+                width="120px"
               />
-            </Box>
-
-            <HStack spacing={4} justifyContent="flex-end">
-              <Button onClick={onClose} variant="outline" colorScheme="gray">
-                キャンセル
-              </Button>
-              <Button onClick={handleSave} colorScheme="purple">
-                保存
-              </Button>
+              <Button
+                label="保存"
+                onClick={handleSave}
+                colorScheme="teal"
+                type="button"
+                size="md"
+                width="120px"
+              />
             </HStack>
           </VStack>
         </ModalBody>
