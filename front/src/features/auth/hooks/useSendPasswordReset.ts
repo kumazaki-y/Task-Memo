@@ -20,7 +20,7 @@ const useSendPasswordReset = (): UseSendPasswordResetReturn => {
         email,
         redirect_url: `${FRONTEND_URL}/reset-password`,
       };
-      await sendEmail(PASSWORD_RESET_REQUEST_URL, body, '/checkemail');
+      await sendEmail(PASSWORD_RESET_REQUEST_URL, body, '/checkresetemail');
     } catch (err) {
       setError('Failed to send password reset request');
     }

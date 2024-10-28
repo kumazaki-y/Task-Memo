@@ -16,14 +16,15 @@ ja:
       unconfirmed: "続行するにはメールアドレスの確認が必要です。"
     mailer:
       confirmation_instructions:
-        subject: "確認手順"
+        subject: "Task-Memo 登録認証"
         request_reset_link_msg: "以下のリンクをクリックしてパスワードをリセットしてください。"
         password_change_link: "パスワードをリセットする"
         ignore_mail_msg: "このメールに心当たりがない場合は、無視してください。"
         no_changes_msg: "上記リンクにアクセスして新しいパスワードを作成するまではパスワードは変更されません。"
-        link_expiration_warning: "注意: このリンクには有効期限があります。有効期限が切れている場合は、再度パスワードリセットをリクエストしてください。"
+        link_expiration_warning: "注意: このリンクの有効期限は15分です。有効期限が切れている場合は、登録手続きをやり直してください。"
       reset_password_instructions:
-        subject: "パスワードリセット手順"
+        subject: "Task-Memo パスワードリセット"
+        link_expiration_warning: "注意: このリンクの有効期限は15分です。有効期限が切れている場合は、再度パスワードリセットをリクエストしてください。"
       unlock_instructions:
         subject: "アカウントのロック解除手順"
       email_changed:

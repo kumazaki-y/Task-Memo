@@ -18,5 +18,16 @@ class Api::V1::Auth::ConfirmationsController < DeviseTokenAuth::ConfirmationsCon
         redirect_to DeviseTokenAuth::Url.generate(redirect_url, account_confirmation_success: false), allow_other_host: true
       end
     end
-  end
+
+    def resend
+      user = User.find_by(email: params[:email])
+  
+      if user && !user.confirmed?
+        user.send_confirmation_instructions
+        render json: { message: '確認メールが再送信されました。' }, status: :ok
+      else
+        render json: { error: '無効なユーザーまたは既に認証されています。' }, status: :unprocessable_entity
+      end
+    end
+end
   

@@ -3,37 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import { USER_REGISTER, FRONTEND_URL } from 'urls';
 
 interface UseRegisterReturn {
-  email: string;
-  setEmail: (email: string) => void;
-  password: string;
-  setPassword: (password: string) => void;
-  confirmPassword: string;
-  setConfirmPassword: (password: string) => void;
-  handleRegister: (event: React.FormEvent) => Promise<void>;
+  handleRegister: (data: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => Promise<void>;
   error: string | undefined;
+  isLoading: boolean;
 }
 
-// エラーデータの型を定義
 interface ErrorData {
   message?: string;
 }
 
 const useRegister = (): UseRegisterReturn => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleRegister = async (data: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => {
     setError('');
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-
-      return;
-    }
+    setIsLoading(true);
 
     try {
       const response = await fetch(USER_REGISTER, {
@@ -42,8 +36,8 @@ const useRegister = (): UseRegisterReturn => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email,
-          password,
+          email: data.email,
+          password: data.password,
           confirm_success_url: `${FRONTEND_URL}/login`,
         }),
       });
@@ -62,18 +56,15 @@ const useRegister = (): UseRegisterReturn => {
       } else {
         setError('Something went wrong. Please try again.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
-    error,
     handleRegister,
+    error,
+    isLoading,
   };
 };
 
