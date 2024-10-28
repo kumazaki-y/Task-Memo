@@ -9,6 +9,8 @@ interface BoardItem {
 
 interface UseBoardsReturn {
   boards: BoardItem[];
+  filterBoards: (searchQuery: string) => void;
+  setBoards: React.Dispatch<React.SetStateAction<BoardItem[]>>;
   boardName: string;
   setBoardName: (name: string) => void;
   isEditing: boolean;
@@ -21,7 +23,8 @@ interface UseBoardsReturn {
 }
 
 const useBoards = (): UseBoardsReturn => {
-  const [boards, setBoards] = useState<BoardItem[]>([]);
+  const [boards, setBoards] = useState<BoardItem[]>([]); // 取得された全てのボード
+  const [filteredBoards, setFilteredBoards] = useState<BoardItem[]>([]); // フィルタリングされたボード
   const [isEditing, setIsEditing] = useState(false);
   const [boardName, setBoardName] = useState('');
   const [selectedBoardId, setSelectedBoardId] = useState<number | null>(null);
@@ -31,10 +34,20 @@ const useBoards = (): UseBoardsReturn => {
     try {
       const data = await apiRequest<BoardItem[]>(BOARDS_API, 'GET');
       setBoards(data);
+      setFilteredBoards(data); // 取得時に全ボードをフィルタリングリストにセット
     } catch (error) {
       console.error('Error fetching boards:', error);
     }
   }, []);
+
+  // ボードを検索クエリに基づいてフィルタリング
+  const filterBoards = (searchQuery: string) => {
+    const filtered = boards.filter((board) =>
+      board.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+    console.log('フィルタリング後のboards:', filtered); // ここでフィルタリング結果を確認
+    setFilteredBoards(filtered); // フィルタされたリストを設定
+  };
 
   // ボードを作成する関数
   const addBoard = async (): Promise<void> => {
@@ -43,6 +56,7 @@ const useBoards = (): UseBoardsReturn => {
         board: { name: boardName },
       });
       setBoards((prevBoards) => [...prevBoards, newBoard]);
+      setFilteredBoards((prevBoards) => [...prevBoards, newBoard]); // 新しいボードもフィルタリングリストに追加
       setBoardName(''); // フォームをリセット
     } catch (error) {
       console.error('Error creating board:', error);
@@ -68,18 +82,31 @@ const useBoards = (): UseBoardsReturn => {
             : board,
         ),
       );
+
+      // filteredBoardsも更新して即時反映を実現
+      setFilteredBoards((prevFilteredBoards) =>
+        prevFilteredBoards.map((board) =>
+          board.id === selectedBoardId
+            ? { ...board, name: updatedBoard.name }
+            : board,
+        ),
+      );
+
       setIsEditing(false);
       setSelectedBoardId(null); // 編集モード解除
     } catch (error) {
       console.error('Error updating board:', error);
     }
   };
-  // ボードを削除する関数
 
+  // ボードを削除する関数
   const deleteBoard = async (id: number): Promise<void> => {
     try {
       await apiRequest(`${BOARDS_API}/${id}`, 'DELETE');
       setBoards((prevBoards) => prevBoards.filter((board) => board.id !== id));
+      setFilteredBoards((prevFilteredBoards) =>
+        prevFilteredBoards.filter((board) => board.id !== id),
+      );
     } catch (error) {
       console.error('Error deleting board:', error);
     }
@@ -97,7 +124,9 @@ const useBoards = (): UseBoardsReturn => {
   }, [fetchBoards]);
 
   return {
-    boards,
+    boards: filteredBoards,
+    filterBoards,
+    setBoards,
     boardName,
     setBoardName,
     isEditing,

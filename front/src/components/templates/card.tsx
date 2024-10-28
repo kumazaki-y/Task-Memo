@@ -14,7 +14,7 @@ const Card: FC<CardProps> = ({ children }) => {
       borderRadius="lg"
       p={8}
       boxShadow="xl"
-      maxWidth="400px"
+      maxWidth="800px"
       width="100%"
     >
       <VStack spacing={6} align="stretch">

@@ -1,5 +1,13 @@
-import { type FC, type ReactNode } from 'react';
-import { Box, Container, VStack, useColorModeValue } from '@chakra-ui/react';
+import { type FC, type ReactNode, useRef } from 'react';
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Button,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import useLogout from '../../features/auth/hooks/useLogout';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -7,25 +15,74 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
   const bgGradient = useColorModeValue(
-    'linear(to-r, purple.400, pink.500)',
-    'linear(to-r, purple.900, pink.800)',
+    'linear(to-r, green.400, teal.500)',
+    'linear(to-r, green.900, teal.800)',
   );
+  const logout = useLogout();
+
+  // Boxのrefを作成
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  // ロゴをクリックしてページのトップに戻す
+  const handleLogoClick = () => {
+    if (boxRef.current != null) {
+      boxRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <Box
-      minHeight="100vh"
-      width="100%"
+      ref={boxRef} // refをBoxに設定
+      position="fixed"
+      top="0"
+      left="0"
+      right="0"
+      bottom="0"
       bgGradient={bgGradient}
-      display="flex"
-      alignItems="flex-start" // 上部に配置
-      justifyContent="center"
-      pt={8} // 上部に余白を確保
+      overflow="auto"
     >
-      <Container maxWidth="800px" p={0}>
-        <VStack spacing={6} align="stretch" width="100%">
-          {children}
-        </VStack>
-      </Container>
+      {/* Header */}
+      <Flex
+        as="header"
+        position="fixed"
+        top={0}
+        width="100%"
+        p={4}
+        bgGradient="linear(to-r, green.600, teal.700)"
+        alignItems="center"
+        justifyContent="space-between"
+        zIndex="1"
+      >
+        {/* ロゴ */}
+        <Heading
+          size="lg"
+          color="white"
+          onClick={handleLogoClick}
+          cursor="pointer"
+        >
+          Task-Memo
+        </Heading>
+
+        {/* ログアウトボタン */}
+        <Button
+          onClick={logout}
+          bg="transparent"
+          color="white"
+          borderColor="white"
+          borderWidth={1}
+          _hover={{ bg: 'whiteAlpha.200' }}
+        >
+          ログアウト
+        </Button>
+      </Flex>
+
+      {/* Main Content */}
+      <Box
+        pt="80px" // ヘッダー分の余白
+        pb="20px"
+      >
+        <Container maxWidth="1600px">{children}</Container>
+      </Box>
     </Box>
   );
 };

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_03_220656) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_27_055307) do
   create_table "boards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name"
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_03_220656) do
     t.boolean "is_completed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position"
     t.index ["board_id"], name: "index_tasks_on_board_id"
   end
 

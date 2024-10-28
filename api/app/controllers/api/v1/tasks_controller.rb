@@ -5,7 +5,7 @@ class Api::V1::TasksController < ApplicationController
   
     # 特定のBoardに紐づくタスクの一覧を取得
     def index
-      tasks = @board.tasks
+      tasks = @board.tasks.order(:position)
       render json: tasks, status: :ok
     end
   
@@ -46,7 +46,7 @@ class Api::V1::TasksController < ApplicationController
     private
   
     def task_params
-      params.require(:task).permit(:name, :description, :due_date, :time_reduction_amount, :time_reduction_period, :is_completed)
+      params.require(:task).permit(:name, :description, :due_date, :time_reduction_amount, :time_reduction_period, :is_completed, :position)
     end
   
     # Boardをセットする

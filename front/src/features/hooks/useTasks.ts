@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { BOARDS_API } from '../../urls'; // BOARDS_APIを使う
-import { apiRequest } from '../../utils/apiRequest'; // 既存のapiRequestを使う
+import { BOARDS_API } from '../../urls';
+import { apiRequest } from '../../utils/apiRequest';
 
-interface Task {
+export interface Task {
   id: number;
   name: string;
   description?: string;
@@ -10,7 +10,7 @@ interface Task {
   time_reduction_amount: number;
   time_reduction_period: string;
   is_completed: boolean;
-  boardId: number; // ボードIDを保持する
+  boardId: number;
 }
 
 interface Board {
@@ -20,6 +20,7 @@ interface Board {
 
 const useTasks = (): {
   tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   taskName: string;
   setTaskName: React.Dispatch<React.SetStateAction<string>>;
   taskDescription: string;
@@ -36,6 +37,7 @@ const useTasks = (): {
     description?: string,
     isCompleted?: boolean,
     dueDate?: string,
+    additionalParams?: { position?: number },
   ) => Promise<void>;
   deleteTask: (taskId: number, boardId: number) => Promise<void>;
   updateTaskStatus: (
@@ -45,34 +47,30 @@ const useTasks = (): {
   ) => Promise<void>;
   resetTaskForm: () => void;
 } => {
-  const [tasks, setTasks] = useState<Task[]>([]); // すべてのタスクを取得して格納
-  const [boards, setBoards] = useState<Board[]>([]); // すべてのボードを取得して格納
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [boards, setBoards] = useState<Board[]>([]);
   const [taskName, setTaskName] = useState<string>('');
   const [taskDescription, setTaskDescription] = useState<string>('');
   const [taskDueDate, setTaskDueDate] = useState<string>('');
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
-  // すべてのボードを取得
   const fetchAllBoards = async (): Promise<void> => {
     try {
       const boardsData = await apiRequest<Board[]>(BOARDS_API, 'GET');
-      setBoards(boardsData); // 取得したボードを保存
+      setBoards(boardsData);
     } catch (error) {
       console.error('Error fetching boards:', error);
     }
   };
 
-  // すべてのタスクを一度に取得
   const fetchAllTasks = useCallback(async (): Promise<void> => {
     try {
-      const allTasks: Task[] = []; // 全てのタスクを格納する配列
-
+      const allTasks: Task[] = [];
       for (const board of boards) {
-        // 各ボードのタスクをループして取得
         const boardTasks = await apiRequest<Task[]>(
           `${BOARDS_API}/${board.id}/tasks`,
           'GET',
-        ); // 各ボードごとのタスクを取得
+        );
         const mappedTasks = boardTasks.map((task) => ({
           ...task,
           boardId: board.id,
@@ -83,7 +81,7 @@ const useTasks = (): {
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }
-  }, [boards]); // boardsが変更されたときだけfetchAllTasksを再生成
+  }, [boards]);
 
   useEffect(() => {
     if (boards.length > 0) {
@@ -93,14 +91,12 @@ const useTasks = (): {
     }
   }, [boards, fetchAllTasks]);
 
-  // boardsが空の場合にもデフォルトでfetchAllTasksを実行する
   useEffect(() => {
     fetchAllBoards().catch((error) => {
       console.error('Error fetching boards:', error);
     });
   }, []);
 
-  // タスクを作成
   const addTask = async (boardId: number, taskName: string): Promise<void> => {
     if (taskName === '') {
       console.error('Task name is required');
@@ -114,32 +110,31 @@ const useTasks = (): {
         'POST',
         {
           task: {
-            name: taskName, // タスク名を正しく送信
+            name: taskName,
             description: taskDescription,
             due_date: taskDueDate,
-            board_id: boardId, // ボードIDを追加
-            time_reduction_amount: 30, // デフォルト値
-            time_reduction_period: 'daily', // デフォルト値
+            board_id: boardId,
+            time_reduction_amount: 30,
+            time_reduction_period: 'daily',
             is_completed: isCompleted,
           },
         },
       );
-      setTasks((prevTasks) => [...prevTasks, { ...newTask, boardId }]);
-
+      setTasks((prevTasks: Task[]) => [...prevTasks, { ...newTask, boardId }]);
       resetTaskForm();
     } catch (error) {
       console.error('Error creating task:', error);
     }
   };
 
-  // タスクを編集する関数
   const updateTask = async (
     taskId: number,
     boardId: number,
-    newTaskName?: string, // 新しいタスク名（省略可能）
-    description?: string, // 新しい説明（省略可能）
-    isCompleted?: boolean, // 完了状態（省略可能）
-    dueDate?: string, // 期限（省略可能）
+    newTaskName?: string,
+    description?: string,
+    isCompleted?: boolean,
+    dueDate?: string,
+    additionalParams: { position?: number } = {},
   ): Promise<void> => {
     try {
       const updatedTask: Task = await apiRequest<Task>(
@@ -151,11 +146,13 @@ const useTasks = (): {
             ...(description !== undefined && { description }),
             ...(isCompleted !== undefined && { is_completed: isCompleted }),
             ...(dueDate !== undefined && { due_date: dueDate }),
+            ...additionalParams,
           },
         },
       );
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
+
+      setTasks((prevTasks: Task[]) =>
+        prevTasks.map((task: Task) =>
           task.id === taskId
             ? {
                 ...task,
@@ -172,7 +169,6 @@ const useTasks = (): {
     }
   };
 
-  // タスクの完了状態を更新する関数
   const updateTaskStatus = async (
     taskId: number,
     boardId: number,
@@ -183,11 +179,11 @@ const useTasks = (): {
         `${BOARDS_API}/${boardId}/tasks/${taskId}`,
         'PATCH',
         {
-          task: { is_completed: isCompleted }, // 完了状態のみを更新
+          task: { is_completed: isCompleted },
         },
       );
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
+      setTasks((prevTasks: Task[]) =>
+        prevTasks.map((task: Task) =>
           task.id === taskId
             ? { ...task, is_completed: updatedTask.is_completed }
             : task,
@@ -198,11 +194,12 @@ const useTasks = (): {
     }
   };
 
-  // タスクを削除
   const deleteTask = async (taskId: number, boardId: number): Promise<void> => {
     try {
       await apiRequest(`${BOARDS_API}/${boardId}/tasks/${taskId}`, 'DELETE');
-      setTasks(tasks.filter((task) => task.id !== taskId));
+      setTasks((prevTasks: Task[]) =>
+        prevTasks.filter((task) => task.id !== taskId),
+      );
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -215,14 +212,9 @@ const useTasks = (): {
     setIsCompleted(false);
   };
 
-  useEffect(() => {
-    fetchAllBoards().catch((error) => {
-      console.error('Error fetching boards:', error);
-    });
-  }, []);
-
   return {
     tasks,
+    setTasks, // 追加
     taskName,
     setTaskName,
     taskDescription,
