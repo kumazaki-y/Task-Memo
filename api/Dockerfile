@@ -1,6 +1,4 @@
-#!/bin/sh
-
-# ベースイメージを指定;
+# ベースイメージを指定
 FROM ruby:3.3.4
 
 # 必要なパッケージのインストール
@@ -24,7 +22,7 @@ COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 
 # エントリーポイントの設定
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 
 # ポートのエクスポート
 EXPOSE 3000
