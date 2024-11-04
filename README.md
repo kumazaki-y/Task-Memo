@@ -131,6 +131,7 @@ TypeScriptを使用することで型安全性が強化され、開発効率と�
 
 以下の図は、この処理の流れを示しています。
 
-https://drive.google.com/file/d/1WAYDOzvVLe9Ym9_5F3pa3GgXQODhIYB4/view?usp=drive_link
+
+![画像の説明](https://drive.google.com/uc?export=view&id=10K-mME20BSDO5qPM4VSsJ2TaYStWcR43)
 
 
