@@ -26,7 +26,7 @@ def get_secret
 
   # SECRET_KEY_BASE用のシークレット取得
   begin
-    secret_key_base_name = "task-memo.com_SECRET_KEY_BASE" # 新しいシークレット名
+    secret_key_base_name = "task-memo.com_SECRET_KEY_BASE" 
     secret_key_base_response = client.get_secret_value(secret_id: secret_key_base_name)
     secret_key_base_secret = JSON.parse(secret_key_base_response.secret_string)
 
