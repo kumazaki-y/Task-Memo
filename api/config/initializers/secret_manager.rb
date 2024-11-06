@@ -36,6 +36,17 @@ def get_secret
   rescue Aws::SecretsManager::Errors::ServiceError => e
     puts "Error retrieving SECRET_KEY_BASE: #{e}"
   end
+    # Secrets ManagerからRAILS_MASTER_KEYを取得
+  begin
+    rails_master_key_name = "Task-Memo/rails/master_key" # Secrets Managerのシークレット名
+    master_key_response = client.get_secret_value(secret_id: rails_master_key_name)
+    master_key_secret = JSON.parse(master_key_response.secret_string)
+
+    # master.keyを環境変数に設定
+    ENV['RAILS_MASTER_KEY'] = master_key_secret['RAILS_MASTER_KEY']
+  rescue Aws::SecretsManager::Errors::ServiceError => e
+    puts "Error retrieving RAILS_MASTER_KEY: #{e}"
+  end
 end
 
 # シークレットを取得して環境変数に設定
