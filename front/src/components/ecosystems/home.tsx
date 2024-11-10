@@ -1,9 +1,11 @@
 import { type FC } from 'react';
 import {
   Box,
+  Flex,
   Heading,
   Text,
   VStack,
+  Image,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
@@ -62,35 +64,83 @@ const Home: FC = () => {
         borderRadius="lg"
         p={8}
         boxShadow="2xl"
-        maxWidth="400px"
+        maxWidth="1200px"
         width="100%"
+        minHeight="700px"
+        mx="auto"
+        mt={{ base: 4, md: 10 }} // モバイルでは小さな上マージン
+        mb={{ base: 4, md: 10 }} // モバイルでは小さな下マージン
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
       >
-        <VStack spacing={6}>
-          <Heading as="h1" size="2xl" textAlign="center">
-            Task-Memo
-          </Heading>
-          <Text fontSize="lg" textAlign="center">
-            {data.message}
-          </Text>
-          <Button
-            label="ログイン"
-            onClick={() => {
-              navigate('/login');
-            }}
-          />
-          <Button
-            label="新規登録"
-            onClick={() => {
-              navigate('/register');
-            }}
-            colorScheme="pink"
-          />
-          <Button
-            label="ゲストログイン"
-            onClick={handleGuestLogin}
-            colorScheme="teal"
-          />
-        </VStack>
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          align="center"
+          justifyContent="space-around"
+          width="100%"
+          gap={{ base: 4, md: 0 }}
+        >
+          {/* 左側の画像（比率を指定） */}
+          <Box flex="1" maxWidth="600px" width="100%">
+            <Image
+              src="/images/home.webp"
+              alt="Task management app illustration"
+              maxWidth="100%" // Box内で幅いっぱいに表示
+              height="auto"
+              borderRadius="lg"
+              objectFit="contain"
+            />
+          </Box>
+
+          {/* 右側の説明文とボタン（比率を指定） */}
+          <VStack flex="1.5" align="center" maxWidth="400px" width="100%">
+            <Heading
+              as="h1"
+              size="3xl"
+              textAlign="center"
+              mb={{ base: 8, md: 20 }}
+            >
+              Task-Memo
+            </Heading>
+
+            <Text
+              fontSize="lg"
+              textAlign="center"
+              fontWeight="bold"
+              mb={{ base: 8, md: 20 }}
+            >
+              {data.message}
+            </Text>
+
+            <VStack spacing={{ base: 8, md: 10 }} width="100%">
+              <Button
+                label="ログイン"
+                size="lg"
+                onClick={() => {
+                  navigate('/login');
+                }}
+                width="300px"
+              />
+              <Button
+                label="新規登録"
+                size="lg"
+                colorScheme="pink"
+                onClick={() => {
+                  navigate('/register');
+                }}
+                width="300px"
+              />
+              <Button
+                label="ゲストログイン"
+                size="lg"
+                colorScheme="teal"
+                onClick={handleGuestLogin}
+                width="300px"
+              />
+            </VStack>
+          </VStack>
+        </Flex>
       </Box>
     </Layout>
   );
