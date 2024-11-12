@@ -132,7 +132,7 @@ const Home: FC = () => {
                 width="300px"
               />
               <Button
-                label="ゲストログイン"
+                label="testゲストログイン"
                 size="lg"
                 colorScheme="teal"
                 onClick={handleGuestLogin}
