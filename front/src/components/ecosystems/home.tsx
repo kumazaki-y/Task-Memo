@@ -84,7 +84,7 @@ const Home: FC = () => {
           {/* 左側の画像（比率を指定） */}
           <Box flex="1" maxWidth="600px" width="100%">
             <Image
-              src="/images/home.webp"
+              src="../../../public/images/home.webp"
               alt="Task management app illustration"
               maxWidth="100%" // Box内で幅いっぱいに表示
               height="auto"
@@ -132,7 +132,7 @@ const Home: FC = () => {
                 width="300px"
               />
               <Button
-                label="testゲストログイン"
+                label="ゲストログイン"
                 size="lg"
                 colorScheme="teal"
                 onClick={handleGuestLogin}
