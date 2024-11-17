@@ -27,6 +27,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       right="0"
       bottom="0"
       bgGradient={bgGradient}
+      overflow="auto"
     >
       {/* Header */}
       <Flex

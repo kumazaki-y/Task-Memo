@@ -5,6 +5,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
+         scope :unconfirmed_and_expired, -> {
+          where('confirmed_at IS NULL AND confirmation_sent_at < ?', Devise.confirm_within.ago)
+        }
   include DeviseTokenAuth::Concerns::User
 
   # ユーザーがログイン認証しているかを判定
