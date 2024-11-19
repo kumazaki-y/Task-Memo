@@ -66,7 +66,6 @@
 - 並び替え    
   - ドラッグ&ドロップ  
   - 状態保持
-- ページネーション
 
 ## 開発環境 (フロントエンド)
 フロントエンドにはTypeScriptとReactを採用しています。
@@ -114,9 +113,11 @@ TypeScriptを使用することで型安全性が強化され、開発効率と�
 - **ECR (Elastic Container Registry)**：アプリケーションのDockerイメージを保存
 - **IAM (ユーザー、ロール、ポリシー)**：アクセス管理
 - **Amazon SES (SMTPインターフェイス)**：カスタムドメインのメール送信
-- **Systems Manager (パラメータストア)**：機密情報の保管
 - **Certificate Manager**：SSL/TLS証明書発行 (API用カスタムドメイン)
 - **CloudWatch (ログ)**：ログ管理
+- AWS Lambda：未認証ユーザーを自動削除する定期処理を実行
+  - AWS EventBridgeと連携し、登録後一定期間が経過した未認証ユーザーを定期的に削除
+  - AWS Secrets Managerを活用し、安全な認証情報管理とプライベートサブネット内のRDSへの接続を実現
 
 ## インフラ構成図
 
