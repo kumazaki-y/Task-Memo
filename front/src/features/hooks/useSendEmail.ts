@@ -8,9 +8,14 @@ interface UseSendEmailReturn {
     url: string,
     body: object,
     redirectPath?: string,
-  ) => Promise<void>;
+  ) => Promise<Response>;
   error: string | null;
   isLoading: boolean;
+}
+
+// APIからのエラーレスポンス専用の型
+interface ErrorResponse {
+  error?: string; // エラーメッセージがオプションで含まれる
 }
 
 export const useSendEmail = (): UseSendEmailReturn => {
@@ -41,10 +46,14 @@ export const useSendEmail = (): UseSendEmailReturn => {
           navigate(redirectPath);
         }
       } else {
-        setError('メールの送信に失敗しました。もう一度お試しください。');
+        const errorData = (await response.json()) as ErrorResponse;
+        setError(errorData.error ?? 'メールの送信に失敗しました。');
       }
+
+      return response;
     } catch (error) {
-      setError('エラーが発生しました。もう一度お試しください。');
+      setError('ネットワークエラーが発生しました。もう一度お試しください。');
+      throw error;
     } finally {
       setIsLoading(false);
     }

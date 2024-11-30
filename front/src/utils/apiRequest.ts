@@ -39,6 +39,7 @@ export const apiRequest = async <T = Record<string, unknown>>(
       headers,
       body:
         body !== null && body !== undefined ? JSON.stringify(body) : undefined,
+      credentials: 'include',
     });
 
     if (!response.ok) {

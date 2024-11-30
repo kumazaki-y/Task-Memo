@@ -1,0 +1,15 @@
+ja:
+  errors:
+    user_not_found: "メールアドレスが登録されていません。"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "メールアドレスを入力してください。"
+              invalid: "有効なメールアドレスを入力してください。"
+              taken: "このメールアドレスはすでに登録されています。"
+            password:
+              blank: "パスワードを入力してください。"
+              too_short: "パスワードは%{count}文字以上で入力してください。"

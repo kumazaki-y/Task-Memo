@@ -46,15 +46,17 @@ const useRegister = (): UseRegisterReturn => {
         navigate('/checkemail');
       } else {
         const errorData = (await response.json()) as ErrorData;
+
+        // サーバーから返されたエラーメッセージをそのまま表示
         setError(
-          errorData.message ?? '登録に失敗しました。もう一度お試しください。',
+          errorData.message ?? 'このメールアドレスは既に登録されています。',
         );
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError('Something went wrong. Please try again.');
+        setError('ネットワークエラーが発生しました。もう一度お試しください。');
       }
     } finally {
       setIsLoading(false);
