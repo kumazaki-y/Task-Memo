@@ -58,6 +58,7 @@ export const useAuth = (): Authstate => {
           client,
           uid,
         },
+        credentials: 'include',
       });
 
       if (response.ok) {

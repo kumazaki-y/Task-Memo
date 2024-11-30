@@ -74,6 +74,7 @@ const useLogin = (): UseLoginReturn => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -103,7 +104,9 @@ const useLogin = (): UseLoginReturn => {
         setShouldReload(true);
       } else {
         const errorData = (await response.json()) as ErrorData;
-        setError(errorData.message ?? 'エラーが発生しました。');
+        setError(
+          errorData.message ?? 'メールアドレスかパスワードに誤りがあります。',
+        );
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
