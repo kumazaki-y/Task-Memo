@@ -83,7 +83,7 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     "www.task-memo.com", # 本番環境のドメイン
-    "api.task-memo.com"  # APIが動作するサブドメイン
+    "api.task-memo.com",  # APIが動作するサブドメイン
     /.*\.vercel\.app/    # Vercelの全サブドメインを許可
   ]
   # Skip DNS rebinding protection for the default health check endpoint.
