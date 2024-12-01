@@ -84,7 +84,9 @@ Rails.application.configure do
   config.hosts = [
     "www.task-memo.com", # 本番環境のドメイン
     "api.task-memo.com",  # APIが動作するサブドメイン
-    /.*\.vercel\.app/    # Vercelの全サブドメインを許可
+    /.*\.vercel\.app/,    # Vercelの全サブドメインを許可
+    "10.0.3.219",        # ホストを許可
+    "10.0.4.126"         # ホストを許可
   ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
