@@ -85,11 +85,14 @@ Rails.application.configure do
     "www.task-memo.com", # 本番環境のドメイン
     "api.task-memo.com",  # APIが動作するサブドメイン
     /.*\.vercel\.app/,    # Vercelの全サブドメインを許可
-    "10.0.3.219",        # ホストを許可
-    "10.0.4.126"         # ホストを許可
+
+    # 内部IPレンジを正規表現で許可
+    /\A10\./,              # 10.x.x.x
+    /\A192\.168\./,        # 192.168.x.x
+    /\A172\.(1[6-9]|2[0-9]|3[0-1])\./, # 172.16.x.x～172.31.x.x
   ]
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = { exclude: ->(request) { request.path == "/health_check" } }
 
 # メール送信設定
 config.action_mailer.delivery_method = :smtp
