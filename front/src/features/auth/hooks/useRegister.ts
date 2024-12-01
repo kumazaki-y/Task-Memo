@@ -40,6 +40,7 @@ const useRegister = (): UseRegisterReturn => {
           password: data.password,
           confirm_success_url: `${FRONTEND_URL}/login`,
         }),
+        credentials: 'include',
       });
 
       if (response.ok) {

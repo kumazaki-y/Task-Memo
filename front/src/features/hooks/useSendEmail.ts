@@ -39,6 +39,7 @@ export const useSendEmail = (): UseSendEmailReturn => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
+        credentials: 'include',
       });
 
       if (response.ok) {
