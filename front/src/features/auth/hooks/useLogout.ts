@@ -35,6 +35,7 @@ const useLogout = (): (() => Promise<void>) => {
           client,
           uid,
         },
+        credentials: 'include',
       });
 
       if (response.ok) {

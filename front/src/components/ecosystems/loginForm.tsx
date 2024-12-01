@@ -27,7 +27,7 @@ import Layout from '../templates/layout';
 
 const LoginForm: FC = () => {
   // useLoginフックを使用してログイン機能を取得
-  const { handleLogin } = useLogin();
+  const { handleLogin, error } = useLogin();
 
   // useValidationでバリデーションをセットアップ
   const {
@@ -106,6 +106,14 @@ const LoginForm: FC = () => {
               {errors.password?.message ?? ''}
             </FormErrorMessage>
           </FormControl>
+
+          {/* グローバルエラー表示 */}
+          {error != null &&
+            error !== '' && ( // errorがnull, undefined, または空文字列でない場合に表示
+              <Text color="red.500" fontSize="sm" textAlign="center">
+                {error}
+              </Text>
+            )}
 
           <Button
             label="ログイン"

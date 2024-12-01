@@ -70,4 +70,9 @@ DeviseTokenAuth.setup do |config|
     elsif Rails.env.development?
       config.default_confirm_success_url = 'http://localhost:5173/login'
     end
+
+    config.redirect_whitelist = [
+      'https://www.task-memo.com',
+      'http://localhost:5173'
+    ]
 end

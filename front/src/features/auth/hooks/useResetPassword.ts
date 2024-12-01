@@ -92,6 +92,7 @@ const useResetPassword = (): {
           password_confirmation: passwordConfirmation,
           reset_password_token: resetPasswordToken,
         }),
+        credentials: 'include',
       });
 
       if (response.ok) {
