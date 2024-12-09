@@ -108,7 +108,7 @@ config.action_mailer.smtp_settings = {
 }
 
 config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
-config.action_mailer.default_url_options = { host: 'www.task-memo.com' }
+config.action_mailer.default_url_options = { host: 'www.task-memo.com', protocol: 'https' }
 config.action_mailer.raise_delivery_errors = true
 config.action_mailer.perform_caching = false
 
