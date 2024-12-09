@@ -1,4 +1,5 @@
 require_relative "boot"
+require_relative "../app/middleware/log_request_headers.rb"
 
 require "rails"
 # Pick the frameworks you want:
@@ -49,5 +50,10 @@ module Myapp
     config.middleware.use ActionDispatch::Cookies # Required for all session management
     config.middleware.use ActionDispatch::Session::CookieStore, config.session_options
     config.middleware.use ActionDispatch::Flash
+
+    # Middlewareの登録
+    config.middleware.insert_before 0, LogRequestHeaders
+    # カスタムミドルウェアのロードパスを追加
+    config.autoload_paths << Rails.root.join('app/middleware')
   end
 end
