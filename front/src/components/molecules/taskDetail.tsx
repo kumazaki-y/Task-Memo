@@ -44,8 +44,8 @@ const TaskDetail: FC<TaskDetailProps> = ({
 }) => {
   const [newName, setNewName] = useState(task.name);
   const [newDescription, setNewDescription] = useState(task.description ?? '');
-  const [newDueDate, setNewDueDate] = useState(task.due_date ?? '');
   const [isCompleted, setIsCompleted] = useState(task.is_completed);
+  const [newDueDate, setNewDueDate] = useState(task.due_date ?? '');
 
   const handleSave = () => {
     updateTaskDetail(
@@ -152,7 +152,7 @@ const TaskDetail: FC<TaskDetailProps> = ({
                     borderColor: accentColor,
                     boxShadow: `0 0 0 1px ${accentColor}`,
                   }}
-                  width="140px"
+                  width="145px"
                   height="40px"
                   onClick={(e) => {
                     (e.target as HTMLInputElement).showPicker();

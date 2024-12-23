@@ -107,6 +107,11 @@ const Task: FC<TaskProps> = ({
     }
   };
 
+  useEffect(() => {
+    // task.due_date が変更された場合に newDueDate を更新
+    setNewDueDate(task.due_date ?? '');
+  }, [task.due_date]);
+
   const bgColor = useColorModeValue(
     task.is_completed ? 'gray.200' : 'white',
     task.is_completed ? 'gray.600' : 'gray.700',
