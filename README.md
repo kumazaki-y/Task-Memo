@@ -303,6 +303,7 @@ urls フォルダにはAPIのエンドポイントやルートのURLを一元管
 - 入力時バリデーション
 ![登録入力時バリデーション](./front/public/images/registration_input.png)
 - 送信時バリデーション
+![登録送信時バリデーション](./front/public/images/registration_submit.png)
 
 ### メールアドレス認証
 - 認証確認通知
@@ -313,12 +314,14 @@ urls フォルダにはAPIのエンドポイントやルートのURLを一元管
 ![再送信](./front/public/images/resubmit_submit.png)
 
 ### パスワードリセット
-- 再設定リクエスト
-![再設定リクエスト](./front/public/images/reset_submit.png)
+- 再設定リクエスト入力時バリデーション
+![再設定リクエスト入力時バリデーション](./front/public/images/reset_input.png)
+- リクエスト送信時バリデーション
+![再設定リクエスト送信時バリデーション](./front/public/images/reset_submit.png)
 - 再設定用メール
 ![再設定用メール](./front/public/images/reset_mail.png)
-
-- 再設定画面
+- 再設定画面入力時バリデーション
+![再設定入力時バリデーション](./front/public/images/reset_submit.png)
 
 ### ゲストログイン
 ![ゲストログイン](./front/public/images/guestlogin.gif)
