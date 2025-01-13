@@ -290,23 +290,53 @@ urls フォルダにはAPIのエンドポイントやルートのURLを一元管
 
 ## 画面
 
-- ホーム
-- ログイン
-- ユーザー登録
-- メールアドレス認証
-  - 認証確認通知
-  - 認証用メール
-  - 未認証警告+再送信ボタン
-- パスワードリセット
-  - 再設定リクエスト
-  - 再設定用メール
-  - 再設定画面
-- ボードCRUD
-- タスクCRUD
-- 検索
-[![Image from Gyazo](https://i.gyazo.com/8b4c3fec0d2a6ccb9ce68ce3a84d08fb.gif)](https://gyazo.com/8b4c3fec0d2a6ccb9ce68ce3a84d08fb)
-- 絞り込み
-- 並び替え
+### ホーム
+![ホーム](./front/public/images/home.png)
+
+### ログイン
+- 入力時バリデーション
+![ログイン入力時バリデーション](./front/public/images/login_input.png)
+- 送信時バリデーション
+![ログイン送信時バリデーション](./front/public/images/login_submit.png)
+
+### ユーザー登録
+- 入力時バリデーション
+![登録入力時バリデーション](./front/public/images/registration_input.png)
+- 送信時バリデーション
+
+### メールアドレス認証
+- 認証確認通知
+![認証確認通知](./front/public/images/certification.png)
+- 認証用メール
+![認証確認通知](./front/public/images/certification_mail.png)
+- 再送信
+![再送信](./front/public/images/resubmit_submit.png)
+
+### パスワードリセット
+- 再設定リクエスト
+![再設定リクエスト](./front/public/images/reset_submit.png)
+- 再設定用メール
+![再設定用メール](./front/public/images/reset_mail.png)
+
+- 再設定画面
+
+### ゲストログイン
+![ゲストログイン](./front/public/images/guestlogin.gif)
+
+### ボードCRUD
+![ボードCURD](./front/public/images/board.gif)
+
+### タスクCRUD
+![タスクCURD](./front/public/images/task.gif)
+
+### 検索
+![検索](./front/public/images/search.gif)
+
+### 絞り込み
+![絞り込み](./front/public/images/narrowdown.gif)
+
+### 並び替え
+![並び替え](./front/public/images/sort.gif)
 
 
 
