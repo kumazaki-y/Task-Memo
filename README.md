@@ -310,7 +310,9 @@ urls フォルダにはAPIのエンドポイントやルートのURLを一元管
 ![認証確認通知](./front/public/images/certification.png)
 - 認証用メール
 ![認証確認通知](./front/public/images/certification_mail.png)
-- 再送信
+
+ ### 認証メール再送信
+ - 送信時バリデーション
 ![再送信](./front/public/images/resubmit_submit.png)
 
 ### パスワードリセット
@@ -321,7 +323,7 @@ urls フォルダにはAPIのエンドポイントやルートのURLを一元管
 - 再設定用メール
 ![再設定用メール](./front/public/images/reset_mail.png)
 - 再設定画面入力時バリデーション
-![再設定入力時バリデーション](./front/public/images/reset_submit.png)
+![再設定入力時バリデーション](./front/public/images/reset.png)
 
 ### ゲストログイン
 ![ゲストログイン](./front/public/images/guestlogin.gif)
