@@ -115,7 +115,7 @@ TypeScriptを使用することで型安全性が強化され、開発効率と�
 
 以下は、この流れを示した構成図です：
 
-![インフラ構成図](https://drive.google.com/uc?export=view&id=15h27Yh7qBIQCQLLvqESC4tHqccxOzL32)
+![インフラ構成図](./front/public/images/infra.png)
 
 
 ---
@@ -156,7 +156,7 @@ RDSスナップショットを定期的にS3へエクスポート。高い耐久
 
 ## ER図
 
-![ER図](https://drive.google.com/uc?export=view&id=1wmSFyD00zgSvfsyQ_NJvm8xy4nzcXmDK)
+![ER図](./front/public/images/ER.png)
 
 上記のER図は、タスク管理アプリケーションのためのデータベース構造を表しています。
 
