@@ -126,7 +126,12 @@ const Dashboard: FC = () => {
                 aria-label={isFormVisible ? 'キャンセル' : 'ボードを追加'}
                 icon={<AddIcon />}
                 onClick={() => {
-                  isFormVisible ? closeAddForm() : toggleFormVisible();
+                  if (isFormVisible) {
+                    closeAddForm();
+                  } else {
+                    setBoardName('');
+                    toggleFormVisible();
+                  }
                 }}
                 bg={buttonBg}
                 color={buttonColor}

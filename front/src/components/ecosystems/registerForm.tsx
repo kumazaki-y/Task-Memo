@@ -157,8 +157,12 @@ const RegisterForm: FC = () => {
             isLoading={isLoading}
           />
           <Text fontSize="sm">
-            <Link as={RouterLink} to="/login" color="purple.500">
-              既にアカウントをお持ちの方はこちら
+            <Link as={RouterLink} to="/login" color="purple.500" mr={2}>
+              既にアカウントをお持ちの方
+            </Link>
+            |
+            <Link as={RouterLink} to="/password" color="purple.500" ml={2}>
+              認証メールの再送信
             </Link>
           </Text>
         </VStack>
