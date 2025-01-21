@@ -151,7 +151,7 @@ src/
 - **Rack CORS (2.0.2)** - フロントエンドとバックエンドを安全に連携させるためのCORS（クロスオリジンリソース）設定を管理。
 
 ### データベース構造
-![ER図](./front/public/images/ER.png)
+![ER図](../front/public/images/ER.png)
 データベースは下記3つの主要テーブルで構成。
 - users: 認証情報を管理。メールアドレスに一意性制約を設定し認証情報の安全性を確保。
 - boards: タスクグループ。
@@ -168,49 +168,14 @@ schema.rbを貼り付けるだけで図を自動生成できるため、効率�
 
 ---
 
-## インフラ
-本プロジェクトのインフラは、AWSを中心に構築され、スケーラビリティと運用効率を重視しています。  
-ECSを利用してコンテナのオーケストレーションを行い、APIサーバーの管理を効率化しました。
-
-フロントエンドで生成された静的ファイルのホスティングには、Vercelを採用しています。  
-バックエンドAPIの実行にはAWSの各種サービスを利用し、拡張性と運用効率を重視したインフラを構築しました。
-
-### 主な使用技術
-- ECS (Elastic Container Service): コンテナのスケーリングと管理。
-- RDS (Aurora MySQL): 高性能かつ信頼性のあるリレーショナルデータベース。
-- S3 (Simple Storage Service): 静的ファイルの保存とバックアップ管理。
-- CloudWatch: ログとメトリクスの監視。
-- Step Functions: ワークフロー管理の自動化。
-
-- **Vercel**：静的ファイルホスティング。
-- **VPC (Virtual Private Cloud)**：ネットワーク範囲を管理 (CIDR: 10.0.0.0/16)。
-- **IGW (Internet Gateway)**：パブリックサブネット用のインターネットゲートウェイ。
-- **パブリックサブネット**：外部と通信が必要なリソースを配置（例：ロードバランサー）。
-- **ALB (Application Load Balancer)**：リクエストをECSタスクに分散。
-- **プライベートサブネット**：データベースやアプリケーションサーバーを配置し、外部からのアクセスを制限。
-- **ECS (Elastic Container Service)**：コンテナのオーケストレーションを管理。
-- **RDS (Aurora MySQL)**：リレーショナルデータベース (RDB)。
-- **ECR (Elastic Container Registry)**：Dockerイメージを保存。
-- **IAM (Identity and Access Management)**：アクセス権限の管理。
-- **Amazon SES (Simple Email Service)**：カスタムドメインからのメール送信。
-- **Certificate Manager**：SSL/TLS証明書の発行。
-- **CloudWatch**：ログ管理とモニタリング。
-- **AWS Lambda**：未認証ユーザーの自動削除処理を実行。
-  - AWS EventBridgeと連携して定期実行。
-  - Secrets Managerを利用し、安全な認証情報管理を実現。
-- **S3 (Simple Storage Service)**：RDSスナップショットの保存とバックアップ管理。
-
-### 技術選定理由
-- ECS: コンテナ化されたAPIサーバーを効率的にデプロイ・スケーリング可能。  
-- RDS: データ整合性と高い読み取り性能を持つリレーショナルデータベース。  
-- S3: 高耐久性のストレージサービスで、バックアップと静的リソース管理を効率化。  
-- CloudWatch: リアルタイムの監視とログ管理を実現し、障害検知を迅速化。  
-- Step Functions: サーバーのスケジュール起動や停止など、運用コストを削減するために採用。
-
-
+## インフラ 
+バックエンドAPIの実行にはAWSの各種サービスを利用し、拡張性・運用効率・セキュリティを重視したインフラを構築しました。  
+AWSの構築が初めてだったため、フロントエンドの静的ファイルホスティングにはデプロイ速度が速く、簡易な管理が可能な**Vercel**を採用しました。  
+[AWSの構築記録](https://qiita.com/kumazaki-y/items/dc8c9270a6b73df1a765)
 
 ### インフラ構成図
-アプリケーションの基本的な処理の流れは以下の通りです：
+![インフラ構成図](../front/public/images/infra.png)
+#### APIリクエストの処理の流れ
 1. ユーザーはVercelにデプロイされたフロントエンドアプリケーションにアクセス。
 2. APIリクエストは、パブリックサブネット内のALB (Application Load Balancer) を通じてバックエンドに送信。
 3. ALBは、ECS (Elastic Container Service) によって管理されるRailsアプリケーションにリクエストを転送。
@@ -218,32 +183,47 @@ ECSを利用してコンテナのオーケストレーションを行い、API�
    - RDSへのデータベースアクセス。
    - Amazon SESを利用したメール送信。
    - CloudWatchにログを送信し、監視・管理を実施。
-以下は、この流れを示した構成図です：
-![インフラ構成図](./front/public/images/infra.png)
 
-### 採用技術による効果
-- 自動スケーリングやモニタリング機能により、可用性とパフォーマンスを最適化。  
-- S3を活用したバックアップ管理でデータ損失リスクを最小化。
+### 主な使用技術
+- **ECS (Elastic Container Service) ＋ ECR (Elastic Container Registry)**
+ コンテナ化されたAPIサーバーを効率的にデプロイ・スケーリングし、最新のDockerイメージを管理。
+- **RDS (Aurora MySQL)**
+  高い可用性とスケーラビリティを持つリレーショナルデータベースでデータ整合性を重視。
+- **S3 (Simple Storage Service)**
+ 静的ファイルやRDSスナップショットを保存し、高耐久性のストレージとして活用。
+- **ALB (Application Load Balancer)**
+ フロントエンドからのリクエストをECSタスクに分散し、スケーラビリティとパフォーマンスを最適化。
+- **CloudWatch**
+ リアルタイム監視とログ管理で障害検知を迅速化。
+- **AWS Lambda**
+ 1.未認証ユーザーの定期削除
+ - トリガー: EventBridgeで1日1回実行。
+ - 処理内容: データベースに接続し、一定期間が経過した未認証ユーザーを削除。
+   [未認証ユーザー自動削除機能の実装手順：Lambda と EventBridge を活用した自動化](https://qiita.com/kumazaki-y/items/d430bb834d957b66b03d)
+  2.Pythonを用いてRDSのスナップショットをS3へ自動エクスポートし、データの保全やコスト削減を実現。
+   - トリガー: EventBridgeで１日１回実行。
+   - 処理内容: 古いスナップショットの削除、新しいスナップショットの作成とS3へのエクスポート。
+ [AWS RDSをS3に自動バックアップする方法](https://qiita.com/kumazaki-y/items/ff2dd507bc5399a5e0ac)
+- **Vercel**
+  フロントエンドの静的ファイルをホスティングし、高速なCDN配信を実現。  
+  [Vercelでのデプロイ記録](https://qiita.com/kumazaki-y/items/536bc580a2bb1fe97366)
+- **IAM (Identity and Access Management)**  
+  最小権限のアクセス権限をECSやRDSに付与することでセキュリティを強化。
+- **Amazon SES (Simple Email Service)**  
+  カスタムドメインからメール送信を実現。
+- **Certificate Manager**  
+  SSL/TLS証明書を発行し、ALB経由でHTTPS通信を実現。
+- **Secrets Manager**
+  データベース接続情報やRailsの暗号化キーを管理し、環境変数として安全に利用。
+- **VPC (Virtual Private Cloud) + サブネット構成**  
+  VPC内でパブリックサブネットにALBを配置、プライベートサブネットにRDSやECSタスクを配置することで、外部アクセスを制限し安全な通信を実現。
+- **Step Fuctions**
+  ECSとRDSの起動・停止をスケジュールして運用コストを削減。
+  
 
-
-### ECSとECRの連携
-ECSはECRから最新のDockerイメージを取得し、アプリケーションのコンテナを実行します。この構成により、迅速かつセキュアなデプロイが可能です。業務での継続的デリバリーを見据えた設計となっています。
-### ECSからCloudWatchへのログ送信
-ECSは、アプリケーションの動作ログやエラーログをCloudWatchに送信します。これにより、エラー発生時の迅速な監視やトラブルシューティングが可能です。
-### ALBとIGWの役割
-ALBは、IGWを介してユーザーリクエストを受け取り、適切なECSタスクに振り分けます。HTTPS通信をサポートし、セキュリティとスケーラビリティを担保します。
-
-### RDSの配置とセキュリティ設計
-RDSはプライベートサブネットに配置され、外部からの直接アクセスを遮断しています。ECSのみがアクセス可能な設計により、安全なデータ管理を実現しています。
-
-### Lambdaによる未認証ユーザーの自動削除
-AWS Lambdaを活用し、未認証ユーザーの自動削除機能を実現しました。
-1. **EventBridge**：スケジュール実行を設定。
-2. **Secrets Manager**：認証情報の安全な管理を実施。
-3. **RDSとの接続**：プライベートサブネット内で安全に通信。
-
-### S3を活用したRDSのバックアップ管理
-RDSスナップショットを定期的にS3へエクスポート。高い耐久性とコスト効率の良さから、長期的なバックアップストレージとして最適です。この設計により、データ損失リスクを最小化し、運用効率を向上させています。
+### 今後の課題
+フロントエンドの静的ファイルもAWS（S3＋CloudFront）にデプロイし、AWSリソースでの一元管理を目指します。
+まだ、CICDを設定していなかったので、GitHub ActionsやCodePipelineによるAWSへの自動デプロイの実装に挑戦したいと考えています。
 
 ## **苦労した点**
 開発中に直面した課題やトラブル解決のプロセスを、Qiitaにまとめています。  
@@ -314,7 +294,7 @@ RDSスナップショットを定期的にS3へエクスポート。高い耐久
 ![並び替え](./front/public/images/sort.gif)
 
 ## 開発記録
-開発中に直面した課題を以下の記事にまとめています。
+開発中に苦労した部分を記事にしています。
 
 ### フロントエンド
 - [eslintrc.jsonのproject設定でtsconfig.jsonが読みこなかったケース](https://qiita.com/kumazaki-y/items/b8c3b887a236a2465b5f)  
