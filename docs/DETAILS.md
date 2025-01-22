@@ -1,10 +1,10 @@
 # Task-Memo: 詳細ドキュメント
 
-本ドキュメントでは、エンジニア向けに技術的な詳細と全体的な機能を解説します。
-本プロジェクトは実務でのチーム開発を想定し、RailsとReactを組み合わせたモノレポ構成での開発に挑戦しました。
+本ドキュメントでは、エンジニア向けに技術的な詳細と全体的な機能を解説します。  
+本プロジェクトは実務でのチーム開発を想定し、RailsとReactを組み合わせたモノレポ構成での開発に挑戦しました。  
 同様に、インフラもAWSでの構築に挑戦しています。
 
-人事担当者や非エンジニア向けの[概要ドキュメント]()はこちら。
+人事担当者や非エンジニア向けの[概要ドキュメント](../README.md)はこちら。
 
 ## 目次
 - [機能一覧](#機能一覧)
@@ -54,19 +54,19 @@ project/
 
 #### Dockerによる開発環境の統一化
 Dockerは開発環境をコンテナとして管理し、ローカルから分離した状態で軽量に実行できるツールです。  
-チームメンバー間で統一された開発環境を容易に共有でき、開発効率が大幅に向上するため採用しました。
+統一された開発環境を容易に共有でき、開発効率が大幅に向上するため採用しました。  
 以下のように効率的なセットアップを実現しています。
  - **環境の一貫性**  
    フロントエンド（React）とバックエンド（Rails）に個別のDockerファイルを作成。  
    将来的なチーム開発における**「自分の環境では動く」といった問題**を防止。  
    本番環境では、Dockerファイルから作成したイメージをECRに格納し、AWS ECSでコンテナをデプロイ。  
    ローカル環境と同一の構成を本番でも再現し、環境間の一貫性を保持。
- - **環境構築の効率化**
+ - **環境構築の効率化**  
    Docker Composeによって一元的にアプリを起動・管理できる仕組みを整え、環境構築にかかる時間を短縮。
 
 #### モノレポ構成による明確な役割分担とコードベースの一元化
-モノレポ構成では、一つのリポジトリ内で複数の技術スタックコードを一元管理します。
-本プロジェクトは、異なる技術スタックのバックエンド（Rails）とフロントエンド（React）のコードを個別に作成。  
+モノレポ構成では、一つのリポジトリ内で複数の技術スタックコードを一元管理します。  
+本プロジェクトは、異なる技術スタックのバックエンド（Rails）とフロントエンド（React）のコードを個別に作成。    
 両者を同一リポジトリに集約し、以下のようにメンテナンス性を向上させています。
 - **役割分担の明確化**  
   フロントエンド（`front/`）はUI/UX設計とクライアント側のロジックを担い、バックエンド（`api/`）はAPI設計とデータ処理を担当。  
@@ -89,7 +89,7 @@ TypeScriptやReact、Chakra UIなど、現在多くの開発現場で採用さ�
   静的型付けにより型エラーを未然に防止し、コードの保守性を向上。  
   IDEの補完機能が充実しており、開発効率が向上。
 - **React (18) ＋ React Router Dom (6.26.1)**  
-  コンポーネントベースの設計で再利用性が高く、SPAのページ遷移を実現。
+  コンポーネントベースの設計で再利用性が高く、SPAのページ遷移を実現。  
   SPAで直感的な操作を実現。
 - **Chakra UI (2.10.1)**  
   デザインの一貫性を確保しつつ、短期間でモダンなUIを構築。
@@ -134,37 +134,45 @@ src/
 将来的な機能追加や変更にも柔軟に対応できる設計を心がけています。
 
 ### 今後の課題
-フロントエンドのテストは実際の画面操作により行っいました。
-本来はJestなどのライブラリを使用しテストを行うべきですが、学習コストと開発速度を比較して未導入の状態です。
-フロントエンド機能のブラッシュアップとともに、今後はJestの学習を進めていきます。
+フロントエンドのテストは実際の画面操作により行いました。  
+本来はJestなどのライブラリを使用しテストを行うべきですが、学習コストと開発速度を比較して未導入の状態です。  
+今後はフロントエンド機能自体のブラッシュアップを行うとともに、Jestによるテスト方法を学習し実装します。
 
 ## バックエンド
-フロントエンドで初めての技術を使うため、バックエンドの方は開発経験があるRailsを選定しました。
+フロントエンドで初めての技術を使うため、バックエンドの方は開発経験があるRailsを選定しました。  
 また、実際の現場でもReact×Railsによる開発が行われているため、今後の実務に活かせる組み合わせと考え採用しました。
 
 ### 使用技術
 広く普及しており、技術記事を参照しやすい技術を使用しています。
-- **Rails (7.1.4)** - RubyによるMVCアーキテクチャで開発効率が高く、認証やバリデーションを短期間で実装可能。
-- **MySQL (mysql2 ~> 0.5)** -高速なデータ処理と安定性を重視し、簡潔な運用が可能なリレーショナルデータベース。
-- **Devise (4.9.4) ＋ Devise Token Auth (1.2.3)** - トークンベースの認証をサポートし、SPAでセキュアなAPI通信を実現。
-- **AWS Secrets Manager (1.108.0)** - MySQLのパスワードやAPIキーを動的に管理し、セキュリティと運用効率を向上。
-- **Rack CORS (2.0.2)** - フロントエンドとバックエンドを安全に連携させるためのCORS（クロスオリジンリソース）設定を管理。
+- **Rails (7.1.4)**  
+  RubyによるMVCアーキテクチャで開発効率が高く、認証やバリデーションを短期間で実装可能。
+- **MySQL (mysql2 ~> 0.5)**  
+  高速なデータ処理と安定性を重視し、簡潔な運用が可能なリレーショナルデータベース。
+- **Devise (4.9.4) ＋ Devise Token Auth (1.2.3)**  
+  トークンベースの認証をサポートし、SPAでセキュアなAPI通信を実現。
+- **AWS Secrets Manager (1.108.0)**  
+  MySQLのパスワードやAPIキーを動的に管理し、セキュリティと運用効率を向上。
+- **Rack CORS (2.0.2)**  
+  フロントエンドとバックエンドを安全に連携させるためのCORS（クロスオリジンリソース）設定を管理。
 
 ### データベース構造
-![ER図](../front/public/images/ER.png)
-データベースは下記3つの主要テーブルで構成。
-- users: 認証情報を管理。メールアドレスに一意性制約を設定し認証情報の安全性を確保。
-- boards: タスクグループ。
-- tasks: 各タスクの詳細情報を管理。
-
-それぞれのテーブルは、ユーザー、タスクグループ、タスクが一貫して紐づくようリレーションを保持しています。  
-boardsテーブルとtasksテーブルの間には1対多のリレーションを設定しています
 図の作成にはdbdiagram.ioを使用しました。  
 schema.rbを貼り付けるだけで図を自動生成できるため、効率的に作成できました。
+![ER図](../front/public/images/ER.png)
+データベースは下記3つの主要テーブルで構成。
+- users  
+  認証情報を管理。メールアドレスに一意性制約を設定し認証情報の安全性を確保。
+- boards  
+  複数のタスクをグループとして管理。
+- tasks  
+  各タスクの詳細情報を管理。
+
+それぞれのテーブルは、ユーザー、タスクグループ、タスクが一貫して紐づくようリレーションを保持しています。  
+boardsテーブルとtasksテーブルの間には1対多のリレーションを設定しています。  
 
 ### 今後の課題
 テストはスピードを優先し、curlコマンドを使用してAPIのステータス確認やレスポンス検証を行っていました。  
-機能の拡張に伴い、今後はRSpecを使用して、ユーザー認証やAPIエンドポイントのレスポンス確認、リレーションの動作検証を中心にユニットテストや統合テストを導入予定です。
+機能の拡張に伴い、今後はRSpecを使用して、ユーザー認証やAPIエンドポイントのレスポンス確認、リレーションの動作検証を中心にユニットテストや統合テストを実装します。  
 
 ---
 
@@ -185,44 +193,43 @@ AWSの構築が初めてだったため、フロントエンドの静的ファ�
    - CloudWatchにログを送信し、監視・管理を実施。
 
 ### 主な使用技術
-- **ECS (Elastic Container Service) ＋ ECR (Elastic Container Registry)**
- コンテナ化されたAPIサーバーを効率的にデプロイ・スケーリングし、最新のDockerイメージを管理。
-- **RDS (Aurora MySQL)**
+- **ECS (Elastic Container Service) ＋ ECR (Elastic Container Registry)**  
+  コンテナ化されたAPIサーバーを効率的にデプロイ・スケーリングし、最新のDockerイメージを管理。
+- **RDS (Aurora MySQL)**  
   高い可用性とスケーラビリティを持つリレーショナルデータベースでデータ整合性を重視。
-- **S3 (Simple Storage Service)**
+- **S3 (Simple Storage Service)**  
  静的ファイルやRDSスナップショットを保存し、高耐久性のストレージとして活用。
-- **ALB (Application Load Balancer)**
+- **ALB (Application Load Balancer)**  
  フロントエンドからのリクエストをECSタスクに分散し、スケーラビリティとパフォーマンスを最適化。
-- **CloudWatch**
+- **CloudWatch**  
  リアルタイム監視とログ管理で障害検知を迅速化。
 - **AWS Lambda**
- 1.未認証ユーザーの定期削除
- - トリガー: EventBridgeで1日1回実行。
- - 処理内容: データベースに接続し、一定期間が経過した未認証ユーザーを削除。
-   [未認証ユーザー自動削除機能の実装手順：Lambda と EventBridge を活用した自動化](https://qiita.com/kumazaki-y/items/d430bb834d957b66b03d)
-  2.Pythonを用いてRDSのスナップショットをS3へ自動エクスポートし、データの保全やコスト削減を実現。
-   - トリガー: EventBridgeで１日１回実行。
-   - 処理内容: 古いスナップショットの削除、新しいスナップショットの作成とS3へのエクスポート。
- [AWS RDSをS3に自動バックアップする方法](https://qiita.com/kumazaki-y/items/ff2dd507bc5399a5e0ac)
-- **Vercel**
+   - Node.jsによる未認証ユーザーの定期削除
+     - トリガー: EventBridgeで1日1回実行。
+     - 処理内容: データベースに接続し、一定期間が経過した未認証ユーザーを削除。
+     - [未認証ユーザー自動削除機能の実装手順：Lambda と EventBridge を活用した自動化](https://qiita.com/kumazaki-y/items/d430bb834d957b66b03d)
+   - PythonによるRDSスナップショットのS3への自動エクスポート
+     - トリガー: EventBridgeで１日１回実行。
+     - 処理内容: 古いスナップショットの削除、新しいスナップショットの作成とS3へのエクスポート。
+     - [AWS RDSをS3に自動バックアップする方法](https://qiita.com/kumazaki-y/items/ff2dd507bc5399a5e0ac)
+- **Vercel**  
   フロントエンドの静的ファイルをホスティングし、高速なCDN配信を実現。  
   [Vercelでのデプロイ記録](https://qiita.com/kumazaki-y/items/536bc580a2bb1fe97366)
 - **IAM (Identity and Access Management)**  
   最小権限のアクセス権限をECSやRDSに付与することでセキュリティを強化。
-- **Amazon SES (Simple Email Service)**  
+- **Amazon SES (Simple Email Service)**    
   カスタムドメインからメール送信を実現。
 - **Certificate Manager**  
   SSL/TLS証明書を発行し、ALB経由でHTTPS通信を実現。
-- **Secrets Manager**
+- **Secrets Manager**  
   データベース接続情報やRailsの暗号化キーを管理し、環境変数として安全に利用。
 - **VPC (Virtual Private Cloud) + サブネット構成**  
   VPC内でパブリックサブネットにALBを配置、プライベートサブネットにRDSやECSタスクを配置することで、外部アクセスを制限し安全な通信を実現。
 - **Step Fuctions**
   ECSとRDSの起動・停止をスケジュールして運用コストを削減。
   
-
 ### 今後の課題
-フロントエンドの静的ファイルもAWS（S3＋CloudFront）にデプロイし、AWSリソースでの一元管理を目指します。
+フロントエンドの静的ファイルもAWS（S3＋CloudFront）にデプロイし、AWSリソースでの一元管理を目指します。  
 まだ、CICDを設定していなかったので、GitHub ActionsやCodePipelineによるAWSへの自動デプロイの実装に挑戦したいと考えています。
 
 ## **苦労した点**
@@ -234,64 +241,64 @@ AWSの構築が初めてだったため、フロントエンドの静的ファ�
 
 ## アプリ画面
 ### ホーム
-![ホーム](./front/public/images/home.png)
+![ホーム](../front/public/images/home.png)
 ### 認証関連
 #### ゲストログイン
 登録不要で簡単にアプリの機能を試せるため、初めてのユーザーでも操作を気軽に体験できます。  
-![ゲストログイン](./front/public/images/guestlogin.gif)
+![ゲストログイン](../front/public/images/guestlogin.gif)
 #### ログイン
 入力時と送信時にバリデーションを行い、セキュリティとユーザー体験を向上させています。
 - 入力時バリデーション
-![ログイン入力時バリデーション](./front/public/images/login_input.png)
+![ログイン入力時バリデーション](../front/public/images/login_input.png)
 - 送信時バリデーション
-![ログイン送信時バリデーション](./front/public/images/login_submit.png)
+![ログイン送信時バリデーション](../front/public/images/login_submit.png)
 #### ユーザー登録
 入力時と送信時にバリデーションを行い、セキュリティとユーザー体験を向上させています。
 - 入力時バリデーション
-![登録入力時バリデーション](./front/public/images/registration_input.png)
+![登録入力時バリデーション](../front/public/images/registration_input.png)
 - 送信時バリデーション
-![登録送信時バリデーション](./front/public/images/registration_submit.png)
+![登録送信時バリデーション](../front/public/images/registration_submit.png)
 #### メールアドレス認証
 - 認証確認通知
 登録リクエスト送信時に、一定時間内に認証が必要なことを画面に表示します。
-![認証確認通知](./front/public/images/certification.png)
+![認証確認通知](../front/public/images/certification.png)
 - 認証用メール
 新規登録後に送信される認証リンク付きのメールを通じて、アカウントの有効性を確認します。
-![認証確認通知](./front/public/images/certification_mail.png)
+![認証確認通知](../front/public/images/certification_mail.png)
 #### 認証メール再送信
 認証メールの有効期限が切れたときに再送信を行えます。未登録のメールアドレスには送信できません。
  - 送信時バリデーション
-![再送信](./front/public/images/resubmit_submit.png)
+![再送信](../front/public/images/resubmit_submit.png)
 #### パスワードリセット
 パスワードを忘れた場合に再設定リクエストを送信できます。
 - 再設定リクエスト入力時バリデーション
-![再設定リクエスト入力時バリデーション](./front/public/images/reset_input.png)
+![再設定リクエスト入力時バリデーション](../front/public/images/reset_input.png)
 - リクエスト送信時バリデーション
-![再設定リクエスト送信時バリデーション](./front/public/images/reset_submit.png)
+![再設定リクエスト送信時バリデーション](../front/public/images/reset_submit.png)
 - 再設定用メール
 リンク付きメールを送信し、パスワード再設定画面へ案内します。
-![再設定用メール](./front/public/images/reset_mail.png)
+![再設定用メール](../front/public/images/reset_mail.png)
 - 再設定画面入力時バリデーション
 再設定用のリンクをクリックすると開くことができる再設定画面で、新しいパスワードを設定します。
-![再設定入力時バリデーション](./front/public/images/reset.png)
+![再設定入力時バリデーション](../front/public/images/reset.png)
 
 
 ### タスク管理
 #### ボードCRUD
 ボード（タスクグループ）の作成、編集、削除が簡単に行えます。  
-![ボードCURD](./front/public/images/board.gif)
+![ボードCURD](../front/public/images/board.gif)
 #### タスクCRUD
 タスクの作成、編集、削除が簡単に行えます。 
-![タスクCURD](./front/public/images/task.gif)
+![タスクCURD](../front/public/images/task.gif)
 #### 検索
 検索バーを使用して、特定の単語を含むボードを抽出することができます。  
-![検索](./front/public/images/search.gif)
+![検索](../front/public/images/search.gif)
 #### 絞り込み
 フィルター機能を活用して、完了・未完了のステータス別にタスクを絞り込めます。  
-![絞り込み](./front/public/images/narrowdown.gif)
+![絞り込み](../front/public/images/narrowdown.gif)
 #### 並び替え
 直感的な操作でタスクの優先順位を調整できます。
-![並び替え](./front/public/images/sort.gif)
+![並び替え](../front/public/images/sort.gif)
 
 ## 開発記録
 開発中に苦労した部分を記事にしています。
