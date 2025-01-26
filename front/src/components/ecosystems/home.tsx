@@ -40,7 +40,6 @@ const Home: FC = () => {
     return (
       <Layout>
         <Box
-          mt="20"
           p="4" // 内側の余白を指定
           bg="white" // 背景色を白に設定
           border="1px" // ボーダーを追加
