@@ -76,7 +76,7 @@
 
 ## 開発記録
 開発中に直面した課題やトラブル解決のプロセスを、Qiitaにまとめています。  
-- [モノレポ構成とCORSの解決策](https://qiita.com/kumazaki-y/items/7acbbfdbac9a838477a1))
+- [モノレポ構成とCORSの解決策](https://qiita.com/kumazaki-y/items/7acbbfdbac9a838477a1)
 - [AWS構築で直面した課題と解決](https://qiita.com/kumazaki-y/items/dc8c9270a6b73df1a765)
 - [Vite×Dockerでのビルドエラー対応](https://qiita.com/kumazaki-y/items/9faf6ab4712d4c6e5c72)
 
