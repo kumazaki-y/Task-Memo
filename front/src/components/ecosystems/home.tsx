@@ -39,9 +39,21 @@ const Home: FC = () => {
   if (error != null) {
     return (
       <Layout>
-        <Text fontSize="xl" mt="20" color="red.500">
-          エラーが発生しました。再度お試しください。
-        </Text>
+        <Box
+          mt="20"
+          p="4" // 内側の余白を指定
+          bg="white" // 背景色を白に設定
+          border="1px" // ボーダーを追加
+          borderColor="gray.300" // ボーダーの色を指定
+          borderRadius="md" // 角丸を追加
+          boxShadow="md" // シャドウを付けて目立たせる
+        >
+          <Text fontSize="xl" mt="20" color="red.500">
+            アプリの稼働時間外です。
+            <br />
+            平日9:00〜18:00の時間帯に再度お試しください。
+          </Text>
+        </Box>
       </Layout>
     );
   }
