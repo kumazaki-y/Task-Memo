@@ -40,16 +40,17 @@ const Home: FC = () => {
     return (
       <Layout>
         <Box
-          p="4" // 内側の余白を指定
-          bg="white" // 背景色を白に設定
-          border="1px" // ボーダーを追加
-          borderColor="gray.300" // ボーダーの色を指定
-          borderRadius="md" // 角丸を追加
-          boxShadow="md" // シャドウを付けて目立たせる
-          display="flex" // Flexboxを有効化
+          p="0" // 内側の余白をゼロに
+          m="0" // 外側の余白をゼロに
+          bg="white"
+          border="1px"
+          borderColor="gray.300"
+          borderRadius="md"
+          boxShadow="md"
+          display="flex" // フレックスボックスで中央揃え
           justifyContent="center" // 横方向で中央揃え
           alignItems="center" // 縦方向で中央揃え
-          minHeight="200px" // ボックスの最小高さを指定（適宜調整）
+          minHeight="200px" // ボックス全体の高さを確保
         >
           <Text fontSize="xl" mt="20" color="red.500">
             アプリの稼働時間外です。
