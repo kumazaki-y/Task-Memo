@@ -46,6 +46,10 @@ const Home: FC = () => {
           borderColor="gray.300" // ボーダーの色を指定
           borderRadius="md" // 角丸を追加
           boxShadow="md" // シャドウを付けて目立たせる
+          display="flex" // Flexboxを有効化
+          justifyContent="center" // 横方向で中央揃え
+          alignItems="center" // 縦方向で中央揃え
+          minHeight="200px" // ボックスの最小高さを指定（適宜調整）
         >
           <Text fontSize="xl" mt="20" color="red.500">
             アプリの稼働時間外です。
