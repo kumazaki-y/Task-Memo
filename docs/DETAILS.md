@@ -8,7 +8,8 @@
 
 このアプリは、**未経験からの転職を目指し実践的なスキルを身につける**ため、  
 モダンな技術スタックを活用して一つのアプリを作り切ることを目標に開発しました。
-実務でのチーム開発を想定し、RailsとReactを組み合わせたモノレポ構成での開発に挑戦しています。  
+
+実務でのチーム開発を想定し、RailsとReactを組み合わせたモノレポ構成での開発に挑戦しています。    
 同様に、インフラもAWSでの構築に挑戦しました。
 
 本ドキュメントは詳細版であり、エンジニア向けに技術的な詳細と全体的な機能を解説します。  
@@ -187,7 +188,6 @@ boardsテーブルとtasksテーブルの間には1対多のリレーション�
 ## インフラ 
 バックエンドAPIの実行にはAWSの各種サービスを利用し、拡張性・運用効率・セキュリティを重視したインフラを構築しました。  
 AWSの構築が初めてだったため、フロントエンドの静的ファイルホスティングにはデプロイ速度が速く、簡易な管理が可能な**Vercel**を採用しました。  
-[AWSの構築記録](https://qiita.com/kumazaki-y/items/dc8c9270a6b73df1a765)
 
 ### インフラ構成図
 ![インフラ構成図](../front/public/images/infra.png)
@@ -215,14 +215,11 @@ AWSの構築が初めてだったため、フロントエンドの静的ファ�
    - Node.jsによる未認証ユーザーの定期削除
      - トリガー: EventBridgeで1日1回実行。
      - 処理内容: データベースに接続し、一定期間が経過した未認証ユーザーを削除。
-     - [未認証ユーザー自動削除機能の実装手順：Lambda と EventBridge を活用した自動化](https://qiita.com/kumazaki-y/items/d430bb834d957b66b03d)
    - PythonによるRDSスナップショットのS3への自動エクスポート
      - トリガー: EventBridgeで１日１回実行。
      - 処理内容: 古いスナップショットの削除、新しいスナップショットの作成とS3へのエクスポート。
-     - [AWS RDSをS3に自動バックアップする方法](https://qiita.com/kumazaki-y/items/ff2dd507bc5399a5e0ac)
 - **Vercel**  
   フロントエンドの静的ファイルをホスティングし、高速なCDN配信を実現。  
-  [Vercelでのデプロイ記録](https://qiita.com/kumazaki-y/items/536bc580a2bb1fe97366)
 - **IAM (Identity and Access Management)**  
   最小権限のアクセス権限をECSやRDSに付与することでセキュリティを強化。
 - **Amazon SES (Simple Email Service)**    
@@ -233,19 +230,12 @@ AWSの構築が初めてだったため、フロントエンドの静的ファ�
   データベース接続情報やRailsの暗号化キーを管理し、環境変数として安全に利用。
 - **VPC (Virtual Private Cloud) + サブネット構成**  
   VPC内でパブリックサブネットにALBを配置、プライベートサブネットにRDSやECSタスクを配置することで、外部アクセスを制限し安全な通信を実現。
-- **Step Fuctions**
+- **Step Functions**
   ECSとRDSの起動・停止をスケジュールして運用コストを削減。
   
 ### 今後の課題
 フロントエンドの静的ファイルもAWS（S3＋CloudFront）にデプロイし、AWSリソースでの一元管理を目指します。  
 まだ、CICDを設定していなかったので、GitHub ActionsやCodePipelineによるAWSへの自動デプロイの実装に挑戦したいと考えています。
-
-## **苦労した点**
-開発中に直面した課題やトラブル解決のプロセスを、Qiitaにまとめています。  
-- [AWS構築で直面した課題と解決](https://qiita.com/kumazaki-y/items/dc8c9270a6b73df1a765)
-
-
-
 
 ## アプリ画面
 ### ホーム
@@ -309,19 +299,30 @@ AWSの構築が初めてだったため、フロントエンドの静的ファ�
 ![並び替え](../front/public/images/sort.gif)
 
 ## 開発記録
-開発中に苦労した部分を記事にしています。
-
-### フロントエンド
-- [eslintrc.jsonのproject設定でtsconfig.jsonが読みこなかったケース](https://qiita.com/kumazaki-y/items/b8c3b887a236a2465b5f)  
-  → ESLintの設定で発生したエラーを調査し、tsconfig.jsonの構造変更で解決。
-- [TypeScriptのリテラル型・タプル型・ユニオン型の整理](https://qiita.com/kumazaki-y/items/7dde8fd8ef4f4acf8082)  
+開発中に苦労した部分や学んだことをQiitaで記事にしています。  
+項目ごとの主要な
 
 ### 開発環境
 - [モノレポ構成でつまづいたリバースプロキシとCORSの問題](https://qiita.com/kumazaki-y/items/7acbbfdbac9a838477a1)  
-- [Vite×ReactのビルドをDockerで行ったときに出たエラー](https://qiita.com/kumazaki-y/items/9faf6ab4712d4c6e5c72)
+  モノレポ環境でのリバースプロキシ設定不備やCORS設定の見直しによる、API連携やCookie認証問題の解決手順を記録。
+- [Vite×ReactのビルドをDockerで行ったときに出たエラー](https://qiita.com/kumazaki-y/items/9faf6ab4712d4c6e5c72)  
+  Docker環境でViteの依存関係（ARM64向けモジュール）が原因で発生したエラーの調査・解決手順を記録。
 
-- 
-## バックエンド
-開発中に直面した課題やトラブル解決のプロセスを、Qiitaにまとめています。  
-- [AWS構築で直面した課題と解決](https://qiita.com/kumazaki-y/items/dc8c9270a6b73df1a765)
+### フロントエンド
+- [eslintrc.jsonのproject設定でtsconfig.jsonが読みこなかったケース](https://qiita.com/kumazaki-y/items/b8c3b887a236a2465b5f)  
+  ESLintの設定で発生したエラーを調査し、tsconfig.jsonの構造変更で解決。
+- [TypeScript　typeof keyof valueofについて](https://qiita.com/kumazaki-y/items/aeae9109177fc0bdf2d2)  
+  型情報の取得やユニオン型生成の基本的な使い方をまとめたメモ。
+
+### バックエンド
+- [devise_token_authを用いたパスワードリセット機能の実装](https://qiita.com/kumazaki-y/items/b2d3323f75339973c601)  
+  ライブラリの仕様を調査し、ヘッダーにトークン情報を含めることでリクエスト失敗を解決。
+- [Railsの仕様によるエラーの解決方法](https://qiita.com/kumazaki-y/items/d0022892a93141619ece)  
+  Rails７のAPIモードで発生したエラーの記録。名前空間に対応したコントローラーの設定方法、存在しないアクションによるコールバックエラーを解決。
+
+### インフラ
+- [AWSの構築記録](https://qiita.com/kumazaki-y/items/dc8c9270a6b73df1a765)  
+  今後のAWS環境構築時に参考記事を探す時間を短縮するため、構築に役立った記事を振り返り用に整理。運用コスト削減やハマった点も記録。
+- [未認証ユーザー自動削除機能の実装手順：Lambda と EventBridge を活用した自動化](https://qiita.com/kumazaki-y/items/d430bb834d957b66b03d)  
+  Secrets Manager で安全に認証情報を管理しながら、RDS データベース内の未認証ユーザーを自動削除する仕組みを構築。VPC やセキュリティグループ設定、ARN の指定などの課題とその解決手順を記録。
 
