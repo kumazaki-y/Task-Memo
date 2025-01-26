@@ -39,25 +39,18 @@ const Home: FC = () => {
   if (error != null) {
     return (
       <Layout>
-        <Box
-          p="0" // 内側の余白をゼロに
-          m="0" // 外側の余白をゼロに
-          bg="white"
-          border="1px"
-          borderColor="gray.300"
-          borderRadius="md"
-          boxShadow="md"
-          display="flex" // フレックスボックスで中央揃え
-          justifyContent="center" // 横方向で中央揃え
-          alignItems="center" // 縦方向で中央揃え
-          minHeight="200px" // ボックス全体の高さを確保
+        <Text
+          fontSize="xl"
+          mt="20"
+          color="red.500"
+          bg="white" // 背景を白に設定
+          display="inline-block" // テキストだけを背景に合わせる
+          px="2" // テキストの周りに少し余白を加える
         >
-          <Text fontSize="xl" mt="20" color="red.500">
-            アプリの稼働時間外です。
-            <br />
-            平日9:00〜18:00の時間帯に再度お試しください。
-          </Text>
-        </Box>
+          アプリの稼働時間外です。
+          <br />
+          平日9:00〜18:00の時間帯に再度お試しください。
+        </Text>
       </Layout>
     );
   }
