@@ -52,6 +52,6 @@ production:
   <<: *default
   database: <%= ENV["MYAPP_DATABASE_NAME"] %>
   username: <%= ENV["MYAPP_DATABASE_USER"] %> # 環境変数でRDSのユーザー名を指定
-  password: <%= ENV["MYAPP_DATABASE_PASSWORD"] %> # 環境変数でRDSのパスワードを指定
+  password: '<%= ENV["MYAPP_DATABASE_PASSWORD"] %>' # 環境変数でRDSのパスワードを指定
   host: <%= ENV["MYAPP_DATABASE_HOST"] %> # 環境変数でRDSのホスト名を指定
   port: 3306 # RDSのポート番号
